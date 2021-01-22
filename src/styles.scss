@@ -1,0 +1,67 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    margin: 0;
+}
+
+ecl-builder {
+    font-family: 'Poppins', 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: black;
+    letter-spacing: 0.5px;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Thin.ttf');
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-ExtraLight.ttf');
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Light.ttf');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Medium.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-SemiBold.ttf');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Bold.ttf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-ExtraBold.ttf');
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('assets/Poppins-Black.ttf');
+    font-weight: 900;
+}

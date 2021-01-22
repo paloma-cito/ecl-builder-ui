@@ -1,0 +1,75 @@
+<div class="modal">
+    <div class="modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ECL Builder</h3>
+                <button type="button" class="close" (click)="close()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="focus-concept-section">
+                    <h3>Focus Concept</h3>
+                    <div class="focus-concept-row">
+                        <select>
+                            <option value="Descendants">Descendants</option>
+                            <option value="Parents">Parents</option>
+                        </select>
+                        <h5>Self</h5>
+                        <input type="checkbox"/>
+                        <input type="text" placeholder="Search..."/>
+                    </div>
+                    <button class="add-row" (click)="newFocusConceptRow()">+</button>
+                </div>
+                <div class="attribute-group-section">
+                    <h3>Attribute Group</h3>
+                    <button class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>
+                    <div *ngIf="ecl?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.length" class="attribute-group">
+                        <div *ngFor="let conjunctionAttributeSet of ecl?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
+                            <select>
+                                <option value="Descendants">Descendants</option>
+                                <option value="Parents">Parents</option>
+                            </select>
+                            <h5>Self</h5>
+                            <input type="checkbox"/>
+                            <input type="text" placeholder="Search..."/>
+                            <select>
+                                <option value="=">=</option>
+                                <option value="!=">!=</option>
+                            </select>
+                            <input type="text" placeholder="Search..."/>
+                        </div>
+                        <button class="add-row extra-padding" (click)="newAttributeGroupRow()">+</button>
+                    </div>
+                </div>
+                <div class="exclusion-group-section">
+                    <h3>Exclusion Group</h3>
+                    <button class="add-group" (click)="newExclusionGroup()">ADD GROUP</button>
+                    <div *ngIf="ecl?.eclRefinement.conjunctionSubRefinements.length" class="exclusion-group">
+                        <div *ngFor="let conjunctionSubRefinement of ecl?.eclRefinement.conjunctionSubRefinements" class="exclusion-group-row">
+                            <select>
+                                <option value="Descendants">Descendants</option>
+                                <option value="Parents">Parents</option>
+                            </select>
+                            <h5>Self</h5>
+                            <input type="checkbox"/>
+                            <input type="text" placeholder="Search..."/>
+                        </div>
+                        <button class="add-row extra-padding" (click)="newExclusionGroupRow()">+</button>
+                    </div>
+                </div>
+                <div class="output-section">
+                    <h3>Output</h3>
+                    <p class="output">{{ecl | json}}</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="cancel" (click)="close()">CANCEL</button>
+                <button type="button" class="accept" (click)="accept()">OK</button>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-background" (click)="close()"></div>
+</div>
