@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "ecl-builder-component": {
+        "ecl-builder-ui": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -17,7 +17,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/ecl-builder-component",
+                        "outputPath": "dist/ecl-builder-ui",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -28,9 +28,14 @@
                             "src/assets"
                         ],
                         "styles": [
+                            "./node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "src/styles.scss"
                         ],
-                        "scripts": []
+                        "scripts": [
+                            "./node_modules/jquery/dist/jquery.min.js",
+                            "./node_modules/popper.js/dist/umd/popper.min.js",
+                            "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -66,18 +71,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "ecl-builder-component:build"
+                        "browserTarget": "ecl-builder-ui:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "ecl-builder-component:build:production"
+                            "browserTarget": "ecl-builder-ui:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "ecl-builder-component:build"
+                        "browserTarget": "ecl-builder-ui:build"
                     }
                 },
                 "test": {
@@ -113,5 +118,5 @@
             }
         }
     },
-    "defaultProject": "ecl-builder-component"
+    "defaultProject": "ecl-builder-ui"
 }

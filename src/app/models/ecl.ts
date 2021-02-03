@@ -71,3 +71,36 @@ export class AttributeSet {
         };
     }
 }
+
+// export class EclObject {
+//
+//     focusConceptRows: AttributeSet[];
+//     attributeGroups: [AttributeSet[]];
+//     exclusionGroups: [AttributeSet[]];
+//
+//     constructor() {
+//         this.focusConceptRows = [new AttributeSet()];
+//         this.attributeGroups = [
+//             [new AttributeSet()]
+//         ];
+//         this.exclusionGroups = [
+//             [new AttributeSet()]
+//         ];
+//     }
+// }
+
+export class EclObject {
+    operator: string;
+    conceptId: string;
+    term: string;
+    wildcard: boolean;
+    self: boolean;
+    fullTerm: string;
+
+    constructor() {
+        this.operator = 'descendantof';
+        this.conceptId = '';
+        this.term = '';
+        this.wildcard = false;
+    }
+}

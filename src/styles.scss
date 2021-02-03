@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
 body {
     margin: 0;
@@ -64,4 +64,14 @@ ecl-builder {
     font-family: 'Poppins';
     src: url('assets/Poppins-Black.ttf');
     font-weight: 900;
+}
+
+ngb-typeahead-window.dropdown-menu {
+    max-width: 30vw;
+    font-size: 12px;
+    overflow-y: hidden;
+
+    button.dropdown-item {
+        font-weight: 300;
+    }
 }

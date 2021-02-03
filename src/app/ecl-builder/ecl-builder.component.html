@@ -12,56 +12,73 @@
                 <div class="focus-concept-section">
                     <h3>Focus Concept</h3>
                     <div class="focus-concept-row">
-                        <select>
-                            <option value="Descendants">Descendants</option>
-                            <option value="Parents">Parents</option>
+                        <select [(ngModel)]="eclObject.operator">
+                            <option [value]="'descendantof'">Descendants</option>
+                            <option [value]="'ancestorof'">Parents</option>
                         </select>
-                        <h5>Self</h5>
-                        <input type="checkbox"/>
-                        <input type="text" placeholder="Search..."/>
+                        <p>Self</p>
+                        <input type="checkbox" [(ngModel)]="eclObject.self"/>
+                        <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" [ngbTypeahead]="search" placement="bottom"/>
                     </div>
-                    <button class="add-row" (click)="newFocusConceptRow()">+</button>
+                    <!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
                 </div>
-                <div class="attribute-group-section">
-                    <h3>Attribute Group</h3>
-                    <button class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>
-                    <div *ngIf="ecl?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.length" class="attribute-group">
-                        <div *ngFor="let conjunctionAttributeSet of ecl?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
-                            <select>
-                                <option value="Descendants">Descendants</option>
-                                <option value="Parents">Parents</option>
-                            </select>
-                            <h5>Self</h5>
-                            <input type="checkbox"/>
-                            <input type="text" placeholder="Search..."/>
-                            <select>
-                                <option value="=">=</option>
-                                <option value="!=">!=</option>
-                            </select>
-                            <input type="text" placeholder="Search..."/>
-                        </div>
-                        <button class="add-row extra-padding" (click)="newAttributeGroupRow()">+</button>
-                    </div>
-                </div>
-                <div class="exclusion-group-section">
-                    <h3>Exclusion Group</h3>
-                    <button class="add-group" (click)="newExclusionGroup()">ADD GROUP</button>
-                    <div *ngIf="ecl?.eclRefinement.conjunctionSubRefinements.length" class="exclusion-group">
-                        <div *ngFor="let conjunctionSubRefinement of ecl?.eclRefinement.conjunctionSubRefinements" class="exclusion-group-row">
-                            <select>
-                                <option value="Descendants">Descendants</option>
-                                <option value="Parents">Parents</option>
-                            </select>
-                            <h5>Self</h5>
-                            <input type="checkbox"/>
-                            <input type="text" placeholder="Search..."/>
-                        </div>
-                        <button class="add-row extra-padding" (click)="newExclusionGroupRow()">+</button>
-                    </div>
-                </div>
+<!--                <div class="focus-concept-section">-->
+<!--                    <h3>Focus Concept</h3>-->
+<!--                    <div *ngFor="let row of eclObject.focusConceptRows" class="focus-concept-row">-->
+<!--                        <select>-->
+<!--                            <option value="Descendants">Descendants</option>-->
+<!--                            <option value="Parents">Parents</option>-->
+<!--                        </select>-->
+<!--                        <h5>Self</h5>-->
+<!--                        <input type="checkbox"/>-->
+<!--                        <input type="text" placeholder="Search..."/>-->
+<!--                    </div>-->
+<!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
+<!--                </div>-->
+<!--                <div class="attribute-group-section">-->
+<!--                    <h3>Attribute Group</h3>-->
+<!--                    <button class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>-->
+<!--                    <ng-container *ngFor="let group of eclObject.attributeGroups">-->
+<!--                        <div class="attribute-group">-->
+<!--                            <div *ngFor="let set of group" class="attribute-group-row">-->
+<!--                                <select>-->
+<!--                                    <option value="Descendants">Descendants</option>-->
+<!--                                    <option value="Parents">Parents</option>-->
+<!--                                </select>-->
+<!--                                <h5>Self</h5>-->
+<!--                                <input type="checkbox"/>-->
+<!--                                <input type="text" placeholder="Search..."/>-->
+<!--                                <select>-->
+<!--                                    <option value="=">=</option>-->
+<!--                                    <option value="!=">!=</option>-->
+<!--                                </select>-->
+<!--                                <input type="text" placeholder="Search..."/>-->
+<!--                            </div>-->
+<!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+<!--                </div>-->
+<!--                <div class="exclusion-group-section">-->
+<!--                    <h3>Exclusion Group</h3>-->
+<!--                    <button class="add-group" (click)="newExclusionGroup()">ADD GROUP</button>-->
+<!--                    <ng-container *ngFor="let group of eclObject.exclusionGroups">-->
+<!--                        <div class="exclusion-group">-->
+<!--                            <div *ngFor="let set of group" class="exclusion-group-row">-->
+<!--                                <select>-->
+<!--                                    <option value="Descendants">Descendants</option>-->
+<!--                                    <option value="Parents">Parents</option>-->
+<!--                                </select>-->
+<!--                                <h5>Self</h5>-->
+<!--                                <input type="checkbox"/>-->
+<!--                                <input type="text" placeholder="Search..."/>-->
+<!--                            </div>-->
+<!--                            <button class="add-row extra-padding" (click)="newExclusionGroupRow(group)">+</button>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+<!--                </div>-->
                 <div class="output-section">
                     <h3>Output</h3>
-                    <p class="output">{{ecl | json}}</p>
+                    <p class="output">{{eclObject | json}}</p>
                 </div>
             </div>
 

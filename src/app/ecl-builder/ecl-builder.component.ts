@@ -1,18 +1,33 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { AttributeSet, Ecl } from '../models/ecl';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AttributeSet, Ecl, EclObject } from '../models/ecl';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { HttpService } from '../services/http.service';
 
 @Component({
     selector: 'app-ecl-builder',
     templateUrl: './ecl-builder.component.html',
-    styleUrls: ['./ecl-builder.component.scss'],
-    encapsulation: ViewEncapsulation.ShadowDom
+    styleUrls: ['./ecl-builder.component.scss']
 })
 export class EclBuilderComponent implements OnInit, OnDestroy {
 
     private element: any;
-    ecl: Ecl;
+    url = 'snowstorm/snomed-ct/MAIN/';
+    eclObject: EclObject;
 
-    constructor(private el: ElementRef) {
+    search = (text$: Observable<string>) => text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+            if (term.length < 3) {
+                return [];
+            } else {
+                return this.httpService.getTypeahead(this.url, term);
+            }
+        })
+    )
+
+    constructor(private el: ElementRef, private httpService: HttpService) {
         this.element = el.nativeElement;
     }
 
@@ -20,7 +35,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
         document.body.appendChild(this.element);
         // this.element.style.display = 'none';
-        this.ecl = new Ecl();
+        this.eclObject = new EclObject();
 
         this.element.addEventListener('click', el => {
             if (el.target.className === 'app-modal') {
@@ -43,25 +58,25 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         document.body.classList.remove('app-modal-open');
     }
 
-    newFocusConceptRow(): void {
-
-    }
-
-    newAttributeGroup(): void {
-
-    }
-
-    newAttributeGroupRow(): void {
-        this.ecl.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.push(new AttributeSet());
-    }
-
-    newExclusionGroup(): void {
-
-    }
-
-    newExclusionGroupRow(): void {
-        this.ecl.eclRefinement.conjunctionSubRefinements.push(new AttributeSet());
-    }
+    // newFocusConceptRow(): void {
+    //     this.eclObject.focusConceptRows.push(new AttributeSet());
+    // }
+    //
+    // newAttributeGroup(): void {
+    //     this.eclObject.attributeGroups.push([new AttributeSet()]);
+    // }
+    //
+    // newAttributeGroupRow(group): void {
+    //     group.push(new AttributeSet());
+    // }
+    //
+    // newExclusionGroup(): void {
+    //     this.eclObject.exclusionGroups.push([new AttributeSet()]);
+    // }
+    //
+    // newExclusionGroupRow(group): void {
+    //     group.push(new AttributeSet());
+    // }
 
     accept(): void {
         console.log('accepted');

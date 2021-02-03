@@ -3,9 +3,10 @@ const concat = require('concat');
 
 concatenate = async () =>{
     const files = [
-        './dist/ecl-builder-component/runtime.js',
-        './dist/ecl-builder-component/polyfills.js',
-        './dist/ecl-builder-component/main.js'
+        './dist/ecl-builder-ui/runtime.js',
+        './dist/ecl-builder-ui/polyfills.js',
+        './dist/ecl-builder-ui/main.js',
+        './dist/ecl-builder-ui/styles.css'
     ];
 
     await fs.ensureDir('output');

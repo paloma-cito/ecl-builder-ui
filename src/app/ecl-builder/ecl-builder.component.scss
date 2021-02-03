@@ -1,36 +1,37 @@
 div.modal {
+    display: block;
+
     div.modal-dialog-centered {
         display: flex;
-        //align-items: center;
         width: 1024px;
-        height: 100vh;
-        margin: 100px auto;
+        margin: 0 auto;
 
         div.modal-content {
             z-index: 1100;
-            width: 1024px;
-            pointer-events: auto;
+            border-radius: 6px;
+            border: none;
 
             div.modal-header {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
+                position: relative;
                 background-color: #343A40;
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;
                 height: 40px;
+                padding: 10px;
 
                 h3 {
                     margin: 0;
-                    padding: 10px;
                     color: white;
                     font-weight: 200;
+                    font-size: 24px;
                     line-height: 20px;
                 }
 
                 button {
-                    margin-top: 6px;
-                    margin-right: 2px;
+                    position: absolute;
+                    top: 20px;
+                    right: 25px;
+                    padding: 0;
                     background-color: transparent;
                     border: none;
                     cursor: pointer;
@@ -41,19 +42,16 @@ div.modal {
 
                     span {
                         font-size: 24px;
-                        font-weight: 100;
+                        font-weight: 200;
                         color: white;
                         text-shadow: none;
-                        line-height: 0.8rem;
+                        line-height: 10px;
                     }
                 }
             }
 
             div.modal-body {
-                background-color: white;
                 padding: 0;
-                max-height: 80vh;
-                overflow: scroll;
 
                 h3 {
                     font-size: 18px;
@@ -63,62 +61,23 @@ div.modal {
                     line-height: 20px;
                 }
 
-                div.focus-concept-section, div.attribute-group-section, div.exclusion-group-section {
+                button.add-group {
+                    background-color: #4EA24E;
+                    border-radius: 16px;
+                    border: none;
+                    color: white;
+                    font-weight: 200;
+                    padding: 4px 12px 4px 12px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: darken(#4EA24E, 5%);
+                    }
+                }
+
+                div.focus-concept-section {
                     border-bottom: 1px solid #dee2e6;
                     position: relative;
-
-                    button.add-group {
-                        position: absolute;
-                        top: 8px;
-                        right: 8px;
-                        background-color: #4EA24E;
-                        border-radius: 16px;
-                        border: none;
-                        color: white;
-                        font-weight: 200;
-                        padding: 4px 12px 4px 12px;
-                        cursor: pointer;
-
-                        &:hover {
-                            background-color: darken(#4EA24E, 5%);
-                        }
-                    }
-
-                    div.focus-concept-row, div.attribute-group-row, div.exclusion-group-row {
-                        padding: 0 8px 8px 8px;
-
-                        select {
-                            padding: 4px 8px 4px 8px;
-                            height: 30px;
-                            border: 1px solid #C8CFD6;
-                            border-radius: 4px;
-                            margin-right: 30px;
-                            transform: translateY(-1px);
-                        }
-
-                        h5 {
-                            font-weight: 300;
-                            display: inline-block;
-                            line-height: 30px;
-                            margin: 0 4px 0 0;
-                        }
-
-                        input[type='checkbox'] {
-                            padding-top: 2px;
-                            transform: scale(1.2);
-                            margin-right: 30px;
-                        }
-
-                        input[type='text'] {
-                            margin-right: 30px;
-                            padding: 0 4px 0 4px;
-                            height: 28px;
-                            font-size: 14px;
-                            border-radius: 4px;
-                            border: 1px solid #C8CFD6;
-                            width: 256px;
-                        }
-                    }
 
                     button.add-row {
                         position: absolute;
@@ -136,30 +95,101 @@ div.modal {
                         padding: 6px;
                         cursor: pointer;
 
-                        &.extra-padding {
-                            bottom: 16px;
-                            right: 16px;
-                        }
-
                         &:hover {
                             background-color: darken(#4EA24E, 5%);
                         }
                     }
 
-                    div.attribute-group {
+                    div.focus-concept-row {
+                        padding: 0 8px 8px 8px;
+
+                        select {
+                            padding: 5px 10px 5px 10px;
+                            height: 30px;
+                            border: 1px solid #C8CFD6;
+                            border-radius: 4px;
+                            margin-right: 30px;
+                            transform: translateY(1px);
+                            line-height: 20px;
+                            font-size: 16px;
+                            font-weight: 300;
+                        }
+
+                        p {
+                            display: inline-block;
+                            line-height: 30px;
+                            font-size: 16px;
+                            font-weight: 300;
+                            margin: 0 4px 0 0;
+                        }
+
+                        input[type='checkbox'] {
+                            padding-top: 2px;
+                            transform: scale(1.2);
+                            margin-right: 30px;
+                        }
+
+                        input[type='text'] {
+                            margin-right: 30px;
+                            padding: 0 4px 0 4px;
+                            height: 30px;
+                            font-size: 14px;
+                            border-radius: 4px;
+                            border: 1px solid #C8CFD6;
+                            width: 256px;
+                        }
+
+                        button.add-row {
+                            position: absolute;
+                            bottom: 8px;
+                            right: 8px;
+                        }
+                    }
+                }
+
+                div.attribute-group-section {
+                    div.attribute-group-row {
+                        position: relative;
                         margin: 8px;
-                        padding: 8px;
+                        padding: 8px 8px 0 8px;
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#49A8DB, 30%);
                         border-radius: 8px;
-                    }
 
-                    div.exclusion-group {
+                        button.add-group {
+                            position: absolute;
+                            top: 8px;
+                            right: 8px;
+                        }
+
+                        button.add-row {
+                            position: absolute;
+                            bottom: 8px;
+                            right: 8px;
+                        }
+                    }
+                }
+
+                div.exclusion-group-section {
+                    div.exclusion-group-row {
+                        position: relative;
                         margin: 8px;
-                        padding: 8px;
+                        padding: 8px 8px 0 8px;
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#EB4C59, 30%);
                         border-radius: 8px;
+
+                        button.add-group {
+                            position: absolute;
+                            top: 8px;
+                            right: 8px;
+                        }
+
+                        button.add-row {
+                            position: absolute;
+                            bottom: 8px;
+                            right: 8px;
+                        }
                     }
                 }
 
@@ -173,7 +203,6 @@ div.modal {
                         border-radius: 8px;
                     }
                 }
-
             }
 
             div.modal-footer {
@@ -184,15 +213,17 @@ div.modal {
                 height: 40px;
                 overflow: hidden;
                 text-align: right;
+                padding: 0;
 
                 button {
-                    font-family: inherit;
                     background-color: transparent;
                     border: none;
                     min-width: 64px;
                     height: 30px;
                     margin: 5px;
                     cursor: pointer;
+                    font-weight: 300;
+                    font-size: 16px;
 
                     &.cancel {
                         color: #808080;
