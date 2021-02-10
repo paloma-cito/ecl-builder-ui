@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { AttributeSet, Ecl, EclObject } from '../models/ecl';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import { EclObject } from '../models/ecl';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpService } from '../services/http.service';
@@ -11,7 +11,7 @@ import { HttpService } from '../services/http.service';
 })
 export class EclBuilderComponent implements OnInit, OnDestroy {
 
-    private element: any;
+    element: any;
     url = 'snowstorm/snomed-ct/MAIN/';
     eclObject: EclObject;
 
