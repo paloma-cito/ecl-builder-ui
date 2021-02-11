@@ -253,3 +253,13 @@ div.modal {
         z-index: 1000;
     }
 }
+
+ngb-typeahead-window.dropdown-menu {
+    max-width: 30vw;
+    font-size: 12px;
+    overflow-y: hidden;
+
+    button.dropdown-item {
+        font-weight: 300;
+    }
+}

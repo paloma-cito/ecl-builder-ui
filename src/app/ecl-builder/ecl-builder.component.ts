@@ -1,8 +1,8 @@
-import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
-import { EclObject } from '../models/ecl';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { HttpService } from '../services/http.service';
+import {Component, ElementRef, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {EclObject} from '../models/ecl';
+import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {HttpService} from '../services/http.service';
 
 @Component({
     selector: 'app-ecl-builder',
