@@ -1,10 +1,21 @@
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
 div.modal {
     display: block;
 
+    font-family: 'Poppins', 'Helvetica Neue', 'Roboto', 'Arial', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: black;
+    letter-spacing: 0.5px;
+
     div.modal-dialog-centered {
-        display: flex;
         width: 1024px;
-        margin: 0 auto;
+        margin: 10vh auto;
 
         div.modal-content {
             z-index: 1100;
@@ -29,9 +40,10 @@ div.modal {
 
                 button {
                     position: absolute;
-                    top: 20px;
-                    right: 25px;
+                    top: 0;
+                    right: 10px;
                     padding: 0;
+                    color: #808080;
                     background-color: transparent;
                     border: none;
                     cursor: pointer;
@@ -258,8 +270,16 @@ ngb-typeahead-window.dropdown-menu {
     max-width: 30vw;
     font-size: 12px;
     overflow-y: hidden;
+}
 
-    button.dropdown-item {
-        font-weight: 300;
-    }
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 2px 8px;
+    clear: both;
+    font-weight: 300;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
 }

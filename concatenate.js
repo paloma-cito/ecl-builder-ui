@@ -10,7 +10,7 @@ concatenate = async () =>{
 
     await fs.ensureDir('output');
     await concat(files, 'output/ecl-builder.js');
-    await fs.copyFile('./dist/ecl-builder-ui/styles.css', 'output/styles.css');
-    await fs.copy('./dist/ecl-builder-ui/assets/', 'output/assets/');
+    // await fs.copyFile('./dist/ecl-builder-ui/styles.css', 'output/styles.css');
+    // await fs.copy('./dist/ecl-builder-ui/assets/', 'output/assets/');
 }
 concatenate();

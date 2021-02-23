@@ -12,14 +12,8 @@ export class HttpService {
     }
 
     getTypeahead(url, term): Observable<any> {
-        const params = {
-            termFilter: term,
-            limit: 20,
-            expand: 'fsn()',
-            activeFilter: true,
-            termActive: true
-        };
-        return this.http.post(url + 'concepts/search', params).pipe(map(responseData => {
+        return this.http.get(url + '/concepts?activeFilter=true&termActive=true&limit=20&term=' + term)
+            .pipe(map(responseData => {
                 const typeaheads = [];
 
                 responseData['items'].forEach((item) => {
