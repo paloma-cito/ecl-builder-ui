@@ -11,14 +11,16 @@
             <div class="modal-body">
                 <div class="focus-concept-section">
                     <h3>Focus Concept</h3>
-                    <div class="focus-concept-row">
-                        <select [(ngModel)]="eclObject.operator">
+                    <div *ngIf="eclObject" class="focus-concept-row">
+                        <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
                             <option [value]="'descendantof'">Descendants</option>
+                            <option [value]="'descendantorselfof'">Descendants or self of</option>
                             <option [value]="'ancestorof'">Parents</option>
+                            <option [value]="'ancestororselfof'">Parents or self of</option>
                         </select>
-                        <p>Self</p>
-                        <input type="checkbox" [(ngModel)]="eclObject.self"/>
-                        <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" [ngbTypeahead]="search" placement="bottom"/>
+<!--                        <p>Self</p>-->
+<!--                        <input type="checkbox" [(ngModel)]="eclObject.self"/>-->
+                        <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (change)="getConceptId()" [ngbTypeahead]="search" placement="bottom"/>
                     </div>
                     <!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
                 </div>
@@ -79,6 +81,7 @@
                 <div class="output-section">
                     <h3>Output</h3>
                     <p class="output">{{eclObject | json}}</p>
+                    <p class="output">{{eclString}}</p>
                 </div>
             </div>
 

@@ -12,15 +12,28 @@ export class HttpService {
     }
 
     getTypeahead(url, term): Observable<any> {
-        return this.http.get(url + '/concepts?activeFilter=true&termActive=true&limit=20&term=' + term)
-            .pipe(map(responseData => {
+        return this.http.get(url + '/MAIN/concepts?activeFilter=true&termActive=true&limit=20&term=' + term)
+            .pipe(map(response => {
                 const typeaheads = [];
 
-                responseData['items'].forEach((item) => {
+                response['items'].forEach((item) => {
                     typeaheads.push(item.id + ' |' + item.fsn.term + '|');
                 });
 
                 return typeaheads;
             }));
+    }
+
+    getStringToModel(url, eclString): Observable<any> {
+        return this.http.get(url + '/util/ecl-string-to-model?ecl=' + eclString);
+    }
+
+    getModelToString(url, eclObject): Observable<any> {
+        if (eclObject.fullTerm) {
+            delete eclObject.fullTerm;
+        }
+        return this.http.post(url + '/util/ecl-model-to-string', eclObject).pipe(map(response => {
+            return response['eclString'];
+        }));
     }
 }

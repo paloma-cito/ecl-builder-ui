@@ -13,8 +13,9 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     element: any;
     @Input() apiUrl: string;
+    @Input() eclString: string;
     @Output() output = new EventEmitter();
-    eclObject: EclObject;
+    eclObject: any;
 
     search = (text$: Observable<string>) => text$.pipe(
         debounceTime(300),
@@ -40,11 +41,32 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.eclObject = new EclObject();
+        if (this.eclString) {
+            this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: EclObject) => {
+                this.eclObject = dataObject;
+
+                this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
+                    this.eclString = dataString;
+                });
+            });
+        } else {
+            this.eclObject = new EclObject('descendantof', '', false);
+        }
     }
 
     ngOnDestroy(): void {
         this.element.remove();
+    }
+
+    getConceptId(): void {
+        this.eclObject.conceptId = this.eclObject.fullTerm.replace(/\D/g, '');
+        this.updateExpression();
+    }
+
+    updateExpression(): void {
+        this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
+            this.eclString = dataString;
+        });
     }
 
     close(): void {

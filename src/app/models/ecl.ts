@@ -92,15 +92,13 @@ export class AttributeSet {
 export class EclObject {
     operator: string;
     conceptId: string;
-    term: string;
     wildcard: boolean;
-    self: boolean;
+    // self: boolean;
     fullTerm: string;
 
-    constructor() {
-        this.operator = 'descendantof';
-        this.conceptId = '';
-        this.term = '';
-        this.wildcard = false;
+    constructor(operator, conceptId, wildcard) {
+        this.operator = operator;
+        this.conceptId = conceptId;
+        this.wildcard = wildcard;
     }
 }
