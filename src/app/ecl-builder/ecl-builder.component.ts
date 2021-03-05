@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {EclObject} from '../models/ecl';
+import {EclExpression, EclObject} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -41,13 +41,16 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         });
 
+        console.log('eclString IN: ', this.eclString);
+
         if (this.eclString) {
             this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: EclObject) => {
+                console.log('API eclModel returned: ', dataObject);
                 this.eclObject = dataObject;
-
-                this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
-                    this.eclString = dataString;
-                });
+                // this.httpService.getModelToString(this.apiUrl, dataObject).subscribe((dataString: string) => {
+                //     console.log('API eclString returned: ', dataString);
+                //     this.eclString = dataString;
+                // });
             });
         } else {
             this.eclObject = new EclObject('descendantof', '', false);
@@ -58,9 +61,14 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.element.remove();
     }
 
-    getConceptId(): void {
-        this.eclObject.conceptId = this.eclObject.fullTerm.replace(/\D/g, '');
+    getConceptId(eclObject): void {
+        eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
+        eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
         this.updateExpression();
+    }
+
+    createShortFormConcept(id, fsn): string {
+        return id + ' |' + fsn + '|';
     }
 
     updateExpression(): void {
@@ -74,7 +82,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     accept(): void {
-        this.output.emit(this.eclObject);
+        this.output.emit(this.eclString);
         document.querySelector('ecl-builder').remove();
     }
 
@@ -99,4 +107,37 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     // }
 
 
+    ECLexpressionBuilder(expression: string): any {
+        const response = expression.match(/(?:[^:,](?!OR)(?!\(<<))+(?:[:,\s]| OR)*/g);
+
+        let whitespaceCount = 0;
+
+        for (let i = 0; i < response.length; i++) {
+            if (i !== 0) {
+                if (response[i - 1].includes(':')) {
+                    whitespaceCount++;
+                }
+
+                if (response[i].startsWith('<<') && !response[i - 1].includes(':')) {
+                    whitespaceCount++;
+                }
+
+                if (!response[i - 1].includes('OR') && response[i].startsWith('OR')) {
+                    whitespaceCount++;
+                }
+
+                if (response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
+                    whitespaceCount--;
+                }
+
+                if (response[i].startsWith('R')) {
+                    whitespaceCount++;
+                }
+            }
+
+            response[i] =  '    '.repeat(whitespaceCount) + response[i].trim();
+        }
+
+        return response;
+    }
 }

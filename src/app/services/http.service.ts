@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import {EclExpression, EclObject} from '../models/ecl';
 
 @Injectable({
     providedIn: 'root'
@@ -25,15 +26,52 @@ export class HttpService {
     }
 
     getStringToModel(url, eclString): Observable<any> {
-        return this.http.get(url + '/util/ecl-string-to-model?ecl=' + eclString);
+        return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
+
+            if (response['conjunctionExpressionConstraints']) {
+                const models = new EclObject();
+                models.conjunctionExpressionConstraints = [];
+
+                response['conjunctionExpressionConstraints'].forEach((item) => {
+                    models.conjunctionExpressionConstraints.push(new EclExpression(item.operator, item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                });
+
+                return models;
+            } else if (response['disjunctionExpressionConstraints']) {
+                const models = new EclObject();
+                models.disjunctionExpressionConstraints = [];
+
+                response['disjunctionExpressionConstraints'].forEach((item) => {
+                    models.disjunctionExpressionConstraints.push(new EclExpression(item.operator, item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                });
+
+                return models;
+            } else {
+                return new EclExpression(response['operator'], response['conceptId'], response['wildcard'], response['term'], response['conceptId'] + ' |' + response['term'] + '|');
+            }
+        }));
     }
 
     getModelToString(url, eclObject): Observable<any> {
-        if (eclObject.fullTerm) {
-            delete eclObject.fullTerm;
-        }
+        eclObject = this.removeFullTerms(eclObject);
+
         return this.http.post(url + '/util/ecl-model-to-string', eclObject).pipe(map(response => {
             return response['eclString'];
         }));
+    }
+
+    removeFullTerms(eclObject): EclObject {
+        if (eclObject.fullTerm) {
+            delete eclObject.fullTerm;
+        } else if (eclObject.conjunctionExpressionConstraints) {
+            eclObject.conjunctionExpressionConstraints.forEach(item => {
+                delete item.fullTerm;
+            });
+        } else if (eclObject.disjunctionExpressionConstraints) {
+            eclObject.disjunctionExpressionConstraints.forEach(item => {
+                delete item.fullTerm;
+            });
+        }
+        return eclObject;
     }
 }
