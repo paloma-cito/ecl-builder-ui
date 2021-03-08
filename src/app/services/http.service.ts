@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import {EclExpression, EclObject} from '../models/ecl';
+import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression} from '../models/ecl';
 
 @Injectable({
     providedIn: 'root'
@@ -29,25 +29,25 @@ export class HttpService {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
 
             if (response['conjunctionExpressionConstraints']) {
-                const models = new EclObject();
-                models.conjunctionExpressionConstraints = [];
+                const models = new ECLConjunctionExpression([]);
 
                 response['conjunctionExpressionConstraints'].forEach((item) => {
-                    models.conjunctionExpressionConstraints.push(new EclExpression(item.operator, item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                    models.conjunctionExpressionConstraints.push(new ECLExpression(item.operator,
+                        item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
                 });
 
                 return models;
             } else if (response['disjunctionExpressionConstraints']) {
-                const models = new EclObject();
-                models.disjunctionExpressionConstraints = [];
+                const models = new ECLDisjunctionExpression([]);
 
                 response['disjunctionExpressionConstraints'].forEach((item) => {
-                    models.disjunctionExpressionConstraints.push(new EclExpression(item.operator, item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                    models.disjunctionExpressionConstraints.push(new ECLExpression(item.operator,
+                        item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
                 });
 
                 return models;
             } else {
-                return new EclExpression(response['operator'], response['conceptId'], response['wildcard'], response['term'], response['conceptId'] + ' |' + response['term'] + '|');
+                return new ECLExpression(response['operator'], response['conceptId'], response['wildcard'], response['term'], response['conceptId'] + ' |' + response['term'] + '|');
             }
         }));
     }
@@ -60,7 +60,7 @@ export class HttpService {
         }));
     }
 
-    removeFullTerms(eclObject): EclObject {
+    removeFullTerms(eclObject): any {
         if (eclObject.fullTerm) {
             delete eclObject.fullTerm;
         } else if (eclObject.conjunctionExpressionConstraints) {

@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {EclExpression, EclObject} from '../models/ecl';
+import {ECLExpression} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -44,7 +44,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         console.log('eclString IN: ', this.eclString);
 
         if (this.eclString) {
-            this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: EclObject) => {
+            this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: any) => {
                 console.log('API eclModel returned: ', dataObject);
                 this.eclObject = dataObject;
                 // this.httpService.getModelToString(this.apiUrl, dataObject).subscribe((dataString: string) => {
@@ -53,7 +53,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 // });
             });
         } else {
-            this.eclObject = new EclObject('descendantof', '', false);
+            this.eclObject = new ECLExpression('descendantof', '', false, '', '');
         }
     }
 
@@ -72,9 +72,9 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     updateExpression(): void {
-        this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
-            this.eclString = dataString;
-        });
+        // this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
+        //     this.eclString = dataString;
+        // });
     }
 
     close(): void {
