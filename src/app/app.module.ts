@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from './services/http.service';
 import { HttpClientModule } from '@angular/common/http';
+import {EclService} from './services/ecl.service';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,10 @@ import { HttpClientModule } from '@angular/common/http';
         NgbTypeaheadModule,
         HttpClientModule
     ],
-    providers: [HttpService],
+    providers: [
+        HttpService,
+        EclService
+    ],
     entryComponents: [EclBuilderComponent]
 })
 export class AppModule {

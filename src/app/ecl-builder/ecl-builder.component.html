@@ -28,7 +28,7 @@
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
                         <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="focus-concept-row">
                             <p *ngIf="!first" class="px-4">AND</p>
-                            <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
+                            <select [(ngModel)]="conj.operator" (ngModelChange)="updateConjunctionExpression()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
@@ -42,7 +42,7 @@
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
                         <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="focus-concept-row">
                             <p *ngIf="!first" class="px-4">OR</p>
-                            <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
+                            <select [(ngModel)]="disj.operator" (ngModelChange)="updateDisjunctionExpression()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
