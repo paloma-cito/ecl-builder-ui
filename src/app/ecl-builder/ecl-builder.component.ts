@@ -55,11 +55,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: any) => {
                 console.log('API eclModel returned: ', dataObject);
                 this.eclService.setEclObject(dataObject);
-
-                // this.httpService.getModelToString(this.apiUrl, dataObject).subscribe((dataString: string) => {
-                //     console.log('API eclString returned: ', dataString);
-                //     this.eclString = dataString;
-                // });
+                this.calculateUpdate();
             });
         } else {
             this.eclService.setEclObject(new ECLExpression('descendantof', '', false, '', ''));
@@ -71,18 +67,17 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     getConceptId(eclObject): void {
-        // this.eclService.setEclObject(new ECLExpression(
-        //     eclObject.operator,
-        //     eclObject.fullTerm.replace(/\D/g, ''),
-        //     eclObject.wildcard,
-        //     eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|')),
-        //     eclObject.fullTerm
-        //     )
-        // );
-
         eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
         eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
 
+        this.calculateUpdate();
+    }
+
+    createShortFormConcept(id, fsn): string {
+        return id + ' |' + fsn + '|';
+    }
+
+    calculateUpdate(): void {
         if (this.eclObject.fullTerm) {
             this.updateExpression();
         } else if (this.eclObject.conjunctionExpressionConstraints) {
@@ -90,10 +85,6 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         } else if (this.eclObject.disjunctionExpressionConstraints) {
             this.updateDisjunctionExpression();
         }
-    }
-
-    createShortFormConcept(id, fsn): string {
-        return id + ' |' + fsn + '|';
     }
 
     updateExpression(): void {
