@@ -48,13 +48,13 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
                         <div class="focus-concept-row">
-                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
+                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpressionWithRefinement()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
                                 <option [value]="'ancestororselfof'">Parents or self of</option>
                             </select>
-                            <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (change)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
+                            <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
 <!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
@@ -68,13 +68,13 @@
                         <div class="attribute-group">
                             <div class="attribute-group-row">
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
-                                       (change)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
-                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator">
+                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpressionWithRefinement()">
                                     <option [value]="'='">=</option>
                                     <option [value]="'!='">!=</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                       (change)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
 <!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
                         </div>

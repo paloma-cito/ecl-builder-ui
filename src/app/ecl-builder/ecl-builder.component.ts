@@ -1,5 +1,12 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression} from '../models/ecl';
+import {
+    Attribute,
+    EClAttributeSet,
+    ECLConjunctionExpression,
+    ECLDisjunctionExpression,
+    ECLExpression,
+    ECLExpressionWithRefinement, EClRefinement, SubAttributeSet, SubRefinement
+} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -78,12 +85,14 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     calculateUpdate(): void {
-        if (this.eclObject.fullTerm) {
+        if (this.eclObject instanceof ECLExpression) {
             this.updateExpression();
-        } else if (this.eclObject.conjunctionExpressionConstraints) {
+        } else if (this.eclObject instanceof ECLConjunctionExpression) {
             this.updateConjunctionExpression();
-        } else if (this.eclObject.disjunctionExpressionConstraints) {
+        } else if (this.eclObject instanceof ECLDisjunctionExpression) {
             this.updateDisjunctionExpression();
+        } else if (this.eclObject instanceof ECLExpressionWithRefinement) {
+            this.updateExpressionWithRefinement();
         }
     }
 
@@ -133,6 +142,41 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 item.fullTerm
             ));
         });
+
+        this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
+            console.log('API eclString returned: ', dataString);
+            this.eclService.setEclString(dataString);
+        });
+    }
+
+    updateExpressionWithRefinement(): void {
+        const eclObject = new ECLExpressionWithRefinement(
+            new ECLExpression(
+                this.eclObject.subexpressionConstraint.operator,
+                this.eclObject.subexpressionConstraint.conceptId,
+                this.eclObject.subexpressionConstraint.wildcard,
+                this.eclObject.subexpressionConstraint.term,
+                this.eclObject.subexpressionConstraint.conceptId + ' |' + this.eclObject.subexpressionConstraint.term + '|'),
+            new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
+                new ECLExpression(
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.wildcard,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId + ' |'
+                    + this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term + '|'),
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator,
+                new ECLExpression(
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.wildcard,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term,
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId + ' |'
+                    + this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term + '|'),
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.reverse,
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.cardinalityMin
+            )))))
+        );
 
         this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
             console.log('API eclString returned: ', dataString);

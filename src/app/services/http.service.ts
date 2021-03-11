@@ -98,16 +98,20 @@ export class HttpService {
     }
 
     removeFullTerms(eclObject): any {
-        if (eclObject.fullTerm) {
+        if (eclObject instanceof ECLExpression) {
             delete eclObject.fullTerm;
-        } else if (eclObject.conjunctionExpressionConstraints) {
+        } else if (eclObject instanceof ECLConjunctionExpression) {
             eclObject.conjunctionExpressionConstraints.forEach(item => {
                 delete item.fullTerm;
             });
-        } else if (eclObject.disjunctionExpressionConstraints) {
+        } else if (eclObject instanceof ECLDisjunctionExpression) {
             eclObject.disjunctionExpressionConstraints.forEach(item => {
                 delete item.fullTerm;
             });
+        } else if (eclObject instanceof ECLExpressionWithRefinement) {
+            delete eclObject.subexpressionConstraint.fullTerm;
+            delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm;
+            delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm;
         }
         return eclObject;
     }

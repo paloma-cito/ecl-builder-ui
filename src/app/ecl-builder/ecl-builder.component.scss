@@ -159,7 +159,8 @@ div.modal {
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#49A8DB, 30%);
                         border-radius: 8px;
-                        padding: 0 8px 8px 8px;
+                        padding-bottom: 8px;
+                        margin: 0 8px 0 8px;
 
                         div.attribute-group-row {
                             position: relative;
