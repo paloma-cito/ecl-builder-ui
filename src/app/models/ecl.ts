@@ -29,3 +29,61 @@ export class ECLDisjunctionExpression {
         this.disjunctionExpressionConstraints = disjunctionArray;
     }
 }
+
+export class ECLExpressionWithRefinement {
+    subexpressionConstraint: ECLExpression;
+    eclRefinement: EClRefinement;
+
+    constructor(subexpressionConstraint, eclRefinement) {
+        this.subexpressionConstraint = subexpressionConstraint;
+        this.eclRefinement = eclRefinement;
+    }
+}
+
+export class EClRefinement {
+    subRefinement: SubRefinement;
+
+    constructor(subRefinement) {
+        this.subRefinement = subRefinement;
+    }
+}
+
+export class SubRefinement {
+    eclAttributeSet: EClAttributeSet;
+
+    constructor(eclAttributeSet) {
+        this.eclAttributeSet = eclAttributeSet;
+    }
+}
+
+export class EClAttributeSet {
+    subAttributeSet: SubAttributeSet;
+
+    constructor(subAttributeSet) {
+        this.subAttributeSet = subAttributeSet;
+    }
+}
+
+export class SubAttributeSet {
+    attribute: Attribute;
+
+    constructor(attribute) {
+        this.attribute = attribute;
+    }
+}
+
+export class Attribute {
+    attributeName: ECLExpression;
+    expressionComparisonOperator: string;
+    value: ECLExpression;
+    reverse: boolean;
+    cardinalityMin: number;
+
+    constructor(attributeName, expressionComparisonOperator, value, reverse, cardinalityMin) {
+        this.attributeName = attributeName;
+        this.expressionComparisonOperator = expressionComparisonOperator;
+        this.value = value;
+        this.reverse = reverse;
+        this.cardinalityMin = cardinalityMin;
+    }
+}

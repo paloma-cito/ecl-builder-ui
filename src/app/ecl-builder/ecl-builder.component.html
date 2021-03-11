@@ -19,12 +19,9 @@
                                 <option [value]="'ancestorof'">Parents</option>
                                 <option [value]="'ancestororselfof'">Parents or self of</option>
                             </select>
-                            <!--                        <p>Self</p>-->
-                            <!--                        <input type="checkbox" [(ngModel)]="eclObject.self"/>-->
                             <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (change)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
-
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
                         <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="focus-concept-row">
                             <p *ngIf="!first" class="px-4">AND</p>
@@ -34,8 +31,6 @@
                                 <option [value]="'ancestorof'">Parents</option>
                                 <option [value]="'ancestororselfof'">Parents or self of</option>
                             </select>
-<!--                            <p>Self</p>-->
-<!--                            <input type="checkbox" [(ngModel)]="conj.self"/>-->
                             <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (change)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
@@ -48,49 +43,43 @@
                                 <option [value]="'ancestorof'">Parents</option>
                                 <option [value]="'ancestororselfof'">Parents or self of</option>
                             </select>
-<!--                            <p>Self</p>-->
-<!--                            <input type="checkbox" [(ngModel)]="disj.self"/>-->
                             <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (change)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
-<!--                                        <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
-                </div>
-<!--                <div class="focus-concept-section">-->
-<!--                    <h3>Focus Concept</h3>-->
-<!--                    <div *ngFor="let row of eclObject.focusConceptRows" class="focus-concept-row">-->
-<!--                        <select>-->
-<!--                            <option value="Descendants">Descendants</option>-->
-<!--                            <option value="Parents">Parents</option>-->
-<!--                        </select>-->
-<!--                        <h5>Self</h5>-->
-<!--                        <input type="checkbox"/>-->
-<!--                        <input type="text" placeholder="Search..."/>-->
-<!--                    </div>-->
+                    <ng-container *ngIf="eclObject?.subexpressionConstraint">
+                        <div class="focus-concept-row">
+                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
+                                <option [value]="'descendantof'">Descendants</option>
+                                <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                <option [value]="'ancestorof'">Parents</option>
+                                <option [value]="'ancestororselfof'">Parents or self of</option>
+                            </select>
+                            <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (change)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
+                        </div>
+                    </ng-container>
 <!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
-<!--                </div>-->
-<!--                <div class="attribute-group-section">-->
-<!--                    <h3>Attribute Group</h3>-->
+                </div>
+
+                <div class="attribute-group-section">
+                    <h3>Attribute Group</h3>
 <!--                    <button class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>-->
 <!--                    <ng-container *ngFor="let group of eclObject.attributeGroups">-->
-<!--                        <div class="attribute-group">-->
-<!--                            <div *ngFor="let set of group" class="attribute-group-row">-->
-<!--                                <select>-->
-<!--                                    <option value="Descendants">Descendants</option>-->
-<!--                                    <option value="Parents">Parents</option>-->
-<!--                                </select>-->
-<!--                                <h5>Self</h5>-->
-<!--                                <input type="checkbox"/>-->
-<!--                                <input type="text" placeholder="Search..."/>-->
-<!--                                <select>-->
-<!--                                    <option value="=">=</option>-->
-<!--                                    <option value="!=">!=</option>-->
-<!--                                </select>-->
-<!--                                <input type="text" placeholder="Search..."/>-->
-<!--                            </div>-->
+                    <ng-container *ngIf="eclObject?.eclRefinement">
+                        <div class="attribute-group">
+                            <div class="attribute-group-row">
+                                <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
+                                       (change)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator">
+                                    <option [value]="'='">=</option>
+                                    <option [value]="'!='">!=</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
+                                       (change)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
 <!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
-<!--                        </div>-->
-<!--                    </ng-container>-->
-<!--                </div>-->
+                        </div>
+                    </ng-container>
+                </div>
 <!--                <div class="exclusion-group-section">-->
 <!--                    <h3>Exclusion Group</h3>-->
 <!--                    <button class="add-group" (click)="newExclusionGroup()">ADD GROUP</button>-->
