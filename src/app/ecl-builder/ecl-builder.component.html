@@ -24,7 +24,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
                         <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="focus-concept-row">
-                            <select *ngIf="!first" (change)="convertToDisjunction()">
+                            <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
                                 <option value="AND" selected>AND</option>
                                 <option value="OR">OR</option>
                             </select>
@@ -39,7 +39,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
                         <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="focus-concept-row">
-                            <select *ngIf="!first" (change)="convertToConjunction()">
+                            <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
                                 <option value="AND">AND</option>
                                 <option value="OR" selected>OR</option>
                             </select>
@@ -63,7 +63,7 @@
                             <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
-<!--                    <button class="add-row" (click)="newFocusConceptRow()">+</button>-->
+                    <button class="add-row" (click)="newFocusConceptRow()"><span>+</span></button>
                 </div>
 
                 <div class="attribute-group-section">
@@ -107,10 +107,10 @@
                 <div class="output-section">
                     <h3>Output</h3>
                     <p class="output">{{eclObject | json}}</p>
-<!--                    <p class="output">{{eclString}}</p>-->
-                    <p class="output">
-                        <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>
-                    </p>
+                    <p class="output">{{eclString}}</p>
+<!--                    <p class="output">-->
+<!--                        <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>-->
+<!--                    </p>-->
 
                 </div>
             </div>

@@ -32,6 +32,10 @@ export class EclService {
         return this.eclString.asObservable();
     }
 
+    convertExpressionToConjunction(expression): ECLConjunctionExpression {
+        return new ECLConjunctionExpression([expression]);
+    }
+
     convertDisjunctionToConjunction(disjunction): ECLConjunctionExpression {
         return new ECLConjunctionExpression(disjunction.disjunctionExpressionConstraints);
     }

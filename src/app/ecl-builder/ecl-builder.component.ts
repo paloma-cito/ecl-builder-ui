@@ -193,10 +193,22 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         document.querySelector('ecl-builder').remove();
     }
 
-    // newFocusConceptRow(): void {
-    //     this.eclObject.focusConceptRows.push(new AttributeSet());
-    // }
-    //
+    newFocusConceptRow(): void {
+        if (this.eclObject instanceof ECLExpression) {
+            this.convertExpressionToConjunction();
+        }
+
+        if (this.eclObject instanceof ECLConjunctionExpression) {
+            this.eclObject.conjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
+            this.eclService.setEclObject(this.eclObject);
+            this.updateConjunctionExpression();
+        } else if (this.eclObject instanceof ECLDisjunctionExpression) {
+            this.eclObject.disjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
+            this.eclService.setEclObject(this.eclObject);
+            this.updateDisjunctionExpression();
+        }
+    }
+
     // newAttributeGroup(): void {
     //     this.eclObject.attributeGroups.push([new AttributeSet()]);
     // }
@@ -213,8 +225,15 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     //     group.push(new AttributeSet());
     // }
 
-    convertToDisjunction(): void {
-        console.log('convertToDisjunction');
+    convertExpressionToConjunction(): void {
+        if (this.eclObject instanceof  ECLExpression) {
+            const conjunction = this.eclService.convertExpressionToConjunction(this.eclObject);
+            this.eclService.setEclObject(conjunction);
+            this.updateConjunctionExpression();
+        }
+    }
+
+    convertConjunctionToDisjunction(): void {
         if (this.eclObject instanceof ECLConjunctionExpression) {
             const disjunction = this.eclService.convertConjunctionToDisjunction(this.eclObject);
             this.eclService.setEclObject(disjunction);
@@ -222,8 +241,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
-    convertToConjunction(): void {
-        console.log('convertToConjunction');
+    convertDisjunctionToConjunction(): void {
         if (this.eclObject instanceof ECLDisjunctionExpression) {
             const conjunction = this.eclService.convertDisjunctionToConjunction(this.eclObject);
             this.eclService.setEclObject(conjunction);
