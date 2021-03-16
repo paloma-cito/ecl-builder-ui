@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
+import {ECLConjunctionExpression, ECLDisjunctionExpression} from '../models/ecl';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +30,13 @@ export class EclService {
 
     getEclString(): Observable<string> {
         return this.eclString.asObservable();
+    }
+
+    convertDisjunctionToConjunction(disjunction): ECLConjunctionExpression {
+        return new ECLConjunctionExpression(disjunction.disjunctionExpressionConstraints);
+    }
+
+    convertConjunctionToDisjunction(conjunction): ECLDisjunctionExpression {
+        return new ECLDisjunctionExpression(conjunction.conjunctionExpressionConstraints);
     }
 }

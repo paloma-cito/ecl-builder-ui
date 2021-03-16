@@ -213,38 +213,57 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     //     group.push(new AttributeSet());
     // }
 
+    convertToDisjunction(): void {
+        console.log('convertToDisjunction');
+        if (this.eclObject instanceof ECLConjunctionExpression) {
+            const disjunction = this.eclService.convertConjunctionToDisjunction(this.eclObject);
+            this.eclService.setEclObject(disjunction);
+            this.updateDisjunctionExpression();
+        }
+    }
+
+    convertToConjunction(): void {
+        console.log('convertToConjunction');
+        if (this.eclObject instanceof ECLDisjunctionExpression) {
+            const conjunction = this.eclService.convertDisjunctionToConjunction(this.eclObject);
+            this.eclService.setEclObject(conjunction);
+            this.updateConjunctionExpression();
+        }
+    }
 
     ECLexpressionBuilder(expression: string): any {
-        const response = expression.match(/(?:[^:,](?!OR)(?!\(<<))+(?:[:,\s]| OR)*/g);
+        if (this.eclString) {
+            const response = expression.match(/(?:[^:,](?!OR)(?!\(<<))+(?:[:,\s]| OR)*/g);
 
-        let whitespaceCount = 0;
+            let whitespaceCount = 0;
 
-        for (let i = 0; i < response.length; i++) {
-            if (i !== 0) {
-                if (response[i - 1].includes(':')) {
-                    whitespaceCount++;
+            for (let i = 0; i < response.length; i++) {
+                if (i !== 0) {
+                    if (response[i - 1].includes(':')) {
+                        whitespaceCount++;
+                    }
+
+                    if (response[i].startsWith('<<') && !response[i - 1].includes(':')) {
+                        whitespaceCount++;
+                    }
+
+                    if (!response[i - 1].includes('OR') && response[i].startsWith('OR')) {
+                        whitespaceCount++;
+                    }
+
+                    if (response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
+                        whitespaceCount--;
+                    }
+
+                    if (response[i].startsWith('R')) {
+                        whitespaceCount++;
+                    }
                 }
 
-                if (response[i].startsWith('<<') && !response[i - 1].includes(':')) {
-                    whitespaceCount++;
-                }
-
-                if (!response[i - 1].includes('OR') && response[i].startsWith('OR')) {
-                    whitespaceCount++;
-                }
-
-                if (response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
-                    whitespaceCount--;
-                }
-
-                if (response[i].startsWith('R')) {
-                    whitespaceCount++;
-                }
+                response[i] =  '    '.repeat(whitespaceCount) + response[i].trim();
             }
 
-            response[i] =  '    '.repeat(whitespaceCount) + response[i].trim();
+            return response;
         }
-
-        return response;
     }
 }
