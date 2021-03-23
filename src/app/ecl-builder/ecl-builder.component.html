@@ -81,21 +81,39 @@
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
-                            <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet"></ng-container>
-                            <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
-                                <select (change)="convertConjunctionToDisjunction()">
-                                    <option value="AND" selected>AND</option>
-                                    <option value="OR">OR</option>
-                                </select>
-                                <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
-                                       (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
-                                <select [(ngModel)]="conjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'='">=</option>
-                                    <option [value]="'!='">!=</option>
-                                </select>
-                                <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
-                                       (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
-                            </div>
+                            <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
+                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
+                                    <select (change)="convertConjunctionRefinementToDisjunctionRefinement()">
+                                        <option value="AND" selected>AND</option>
+                                        <option value="OR">OR</option>
+                                    </select>
+                                    <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
+                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                    <select [(ngModel)]="conjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
+                                        <option [value]="'='">=</option>
+                                        <option [value]="'!='">!=</option>
+                                    </select>
+                                    <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
+                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
+                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet" class="attribute-group-row">
+                                    <select (change)="convertDisjunctionRefinementToConjunctionRefinement()">
+                                        <option value="AND">AND</option>
+                                        <option value="OR" selected>OR</option>
+                                    </select>
+                                    <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.fullTerm"
+                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                    <select [(ngModel)]="disjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
+                                        <option [value]="'='">=</option>
+                                        <option [value]="'!='">!=</option>
+                                    </select>
+                                    <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
+                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
+                            </ng-container>
+
 <!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
                         </div>
                     </ng-container>

@@ -62,11 +62,11 @@ export class EclService {
                 expression.conceptId,
                 expression.wildcard,
                 expression.term,
-                expression.conceptId + ' |' + expression.term + '|'),
+                this.createShortFormConcept(expression)),
             new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
-                new ECLExpression('descendantof', '', false, '', ''),
+                new ECLExpression(),
                 '=',
-                new ECLExpression('descendantof', '', false, '', ''),
+                new ECLExpression(),
                 false,
                 1
             )))))

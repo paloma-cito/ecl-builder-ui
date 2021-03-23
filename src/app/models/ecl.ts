@@ -5,7 +5,7 @@ export class ECLExpression {
     term: string;
     fullTerm: string;
 
-    constructor(operator, conceptId, wildcard, term, fullTerm) {
+    constructor(operator?, conceptId?, wildcard?, term?, fullTerm?) {
         this.operator = operator;
         this.conceptId = conceptId;
         this.wildcard = wildcard;
@@ -59,10 +59,12 @@ export class SubRefinement {
 export class EClAttributeSet {
     subAttributeSet: SubAttributeSet;
     conjunctionAttributeSet?: SubAttributeSet[];
+    disjunctionAttributeSet?: SubAttributeSet[];
 
-    constructor(subAttributeSet, conjunctionAttributeSet?) {
+    constructor(subAttributeSet, conjunctionAttributeSet?, disjunctionAttributeSet?) {
         this.subAttributeSet = subAttributeSet;
         this.conjunctionAttributeSet = conjunctionAttributeSet;
+        this.disjunctionAttributeSet = disjunctionAttributeSet;
     }
 }
 

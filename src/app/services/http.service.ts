@@ -58,6 +58,13 @@ export class HttpService {
                     });
                 }
 
+                if (expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                    expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
+                        item.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(item.attribute.attributeName);
+                        item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                    });
+                }
+
                 return expression;
             } else {
                 const expression: ECLExpression = this.cloneObject(response);
@@ -96,6 +103,13 @@ export class HttpService {
 
             if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
                 eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+                    delete item.attribute.attributeName.fullTerm;
+                    delete item.attribute.value.fullTerm;
+                });
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
                     delete item.attribute.attributeName.fullTerm;
                     delete item.attribute.value.fullTerm;
                 });

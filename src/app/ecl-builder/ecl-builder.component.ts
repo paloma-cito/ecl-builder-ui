@@ -1,5 +1,10 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression} from '../models/ecl';
+import {
+    ECLConjunctionExpression,
+    ECLDisjunctionExpression,
+    ECLExpression,
+    ECLExpressionWithRefinement
+} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -67,8 +72,18 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     getConceptId(eclObject): void {
-        eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
-        eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
+        if (eclObject) {
+            if (eclObject.fullTerm === '*') {
+                eclObject.wildcard = true;
+                delete eclObject.conceptId;
+                delete eclObject.term;
+                delete eclObject.operator;
+            } else {
+                eclObject.wildcard = false;
+                eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
+                eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
+            }
+        }
 
         this.updateExpression();
     }
@@ -97,11 +112,11 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
 
         if (this.eclObject.conjunctionExpressionConstraints) {
-            this.eclObject.conjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
+            this.eclObject.conjunctionExpressionConstraints.push(new ECLExpression());
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         } else if (this.eclObject.disjunctionExpressionConstraints) {
-            this.eclObject.disjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
+            this.eclObject.disjunctionExpressionConstraints.push(new ECLExpression());
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         }
@@ -139,6 +154,28 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         if (this.eclObject.disjunctionExpressionConstraints) {
             const conjunction = this.eclService.convertDisjunctionToConjunction(this.eclObject);
             this.eclService.setEclObject(conjunction);
+            this.updateExpression();
+        }
+    }
+
+    convertConjunctionRefinementToDisjunctionRefinement(): void {
+        if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+            const conjunctionRefinement = this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet;
+            delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet;
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet = conjunctionRefinement;
+
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        }
+    }
+
+    convertDisjunctionRefinementToConjunctionRefinement(): void {
+        if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+            const disjunctionRefinement = this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet;
+            delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet;
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet = disjunctionRefinement;
+
+            this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         }
     }
