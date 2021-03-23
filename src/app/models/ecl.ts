@@ -58,9 +58,11 @@ export class SubRefinement {
 
 export class EClAttributeSet {
     subAttributeSet: SubAttributeSet;
+    conjunctionAttributeSet?: SubAttributeSet[];
 
-    constructor(subAttributeSet) {
+    constructor(subAttributeSet, conjunctionAttributeSet?) {
         this.subAttributeSet = subAttributeSet;
+        this.conjunctionAttributeSet = conjunctionAttributeSet;
     }
 }
 

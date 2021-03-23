@@ -28,7 +28,7 @@
                                 <option value="AND" selected>AND</option>
                                 <option value="OR">OR</option>
                             </select>
-                            <select [(ngModel)]="conj.operator" (ngModelChange)="updateConjunctionExpression()">
+                            <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
@@ -43,7 +43,7 @@
                                 <option value="AND">AND</option>
                                 <option value="OR" selected>OR</option>
                             </select>
-                            <select [(ngModel)]="disj.operator" (ngModelChange)="updateDisjunctionExpression()">
+                            <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
@@ -54,7 +54,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
                         <div class="focus-concept-row">
-                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpressionWithRefinement()">
+                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
                                 <option [value]="'descendantof'">Descendants</option>
                                 <option [value]="'descendantorselfof'">Descendants or self of</option>
                                 <option [value]="'ancestorof'">Parents</option>
@@ -63,54 +63,50 @@
                             <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
                         </div>
                     </ng-container>
-                    <button class="add-row" (click)="newFocusConceptRow()"><span>+</span></button>
+                    <button *ngIf="!eclObject?.eclRefinement" class="add-row" (click)="newFocusConceptRow()"><span>+</span></button>
                 </div>
 
                 <div class="attribute-group-section">
                     <h3>Attribute Group</h3>
-<!--                    <button class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>-->
-<!--                    <ng-container *ngFor="let group of eclObject.attributeGroups">-->
+                    <button *ngIf="eclObject?.fullTerm" class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="attribute-group">
                             <div class="attribute-group-row">
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
-                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpressionWithRefinement()">
+                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                     <option [value]="'='">=</option>
                                     <option [value]="'!='">!=</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
+                            <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet"></ng-container>
+                            <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
+                                <select (change)="convertConjunctionToDisjunction()">
+                                    <option value="AND" selected>AND</option>
+                                    <option value="OR">OR</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
+                                       (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                <select [(ngModel)]="conjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'='">=</option>
+                                    <option [value]="'!='">!=</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
+                                       (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
 <!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
                         </div>
                     </ng-container>
                 </div>
-<!--                <div class="exclusion-group-section">-->
-<!--                    <h3>Exclusion Group</h3>-->
-<!--                    <button class="add-group" (click)="newExclusionGroup()">ADD GROUP</button>-->
-<!--                    <ng-container *ngFor="let group of eclObject.exclusionGroups">-->
-<!--                        <div class="exclusion-group">-->
-<!--                            <div *ngFor="let set of group" class="exclusion-group-row">-->
-<!--                                <select>-->
-<!--                                    <option value="Descendants">Descendants</option>-->
-<!--                                    <option value="Parents">Parents</option>-->
-<!--                                </select>-->
-<!--                                <h5>Self</h5>-->
-<!--                                <input type="checkbox"/>-->
-<!--                                <input type="text" placeholder="Search..."/>-->
-<!--                            </div>-->
-<!--                            <button class="add-row extra-padding" (click)="newExclusionGroupRow(group)">+</button>-->
-<!--                        </div>-->
-<!--                    </ng-container>-->
-<!--                </div>-->
                 <div class="output-section">
                     <h3>Output</h3>
-                    <p class="output">{{eclObject | json}}</p>
-                    <p class="output">{{eclString}}</p>
-<!--                    <p class="output">-->
-<!--                        <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>-->
-<!--                    </p>-->
+<!--                    <p class="output">{{eclObject | json}}</p>-->
+<!--                    <p class="output">{{eclString}}</p>-->
+                    <p class="output">
+                        <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>
+                    </p>
 
                 </div>
             </div>

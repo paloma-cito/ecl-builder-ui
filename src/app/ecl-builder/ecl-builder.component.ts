@@ -1,12 +1,5 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {
-    Attribute,
-    EClAttributeSet,
-    ECLConjunctionExpression,
-    ECLDisjunctionExpression,
-    ECLExpression,
-    ECLExpressionWithRefinement, EClRefinement, SubAttributeSet, SubRefinement
-} from '../models/ecl';
+import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -59,10 +52,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         if (this.eclString) {
             this.eclService.setEclString(this.eclString);
 
-            this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe( (dataObject: any) => {
+            this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe((dataObject: any) => {
                 console.log('API eclModel returned: ', dataObject);
                 this.eclService.setEclObject(dataObject);
-                this.calculateUpdate();
+                this.updateExpression();
             });
         } else {
             this.eclService.setEclObject(new ECLExpression('descendantof', '', false, '', ''));
@@ -77,106 +70,11 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
         eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
 
-        this.calculateUpdate();
-    }
-
-    createShortFormConcept(id, fsn): string {
-        return id + ' |' + fsn + '|';
-    }
-
-    calculateUpdate(): void {
-        if (this.eclObject instanceof ECLExpression) {
-            this.updateExpression();
-        } else if (this.eclObject instanceof ECLConjunctionExpression) {
-            this.updateConjunctionExpression();
-        } else if (this.eclObject instanceof ECLDisjunctionExpression) {
-            this.updateDisjunctionExpression();
-        } else if (this.eclObject instanceof ECLExpressionWithRefinement) {
-            this.updateExpressionWithRefinement();
-        }
+        this.updateExpression();
     }
 
     updateExpression(): void {
-        const eclObject = new ECLExpression(
-            this.eclObject.operator,
-            this.eclObject.conceptId,
-            this.eclObject.wildcard,
-            this.eclObject.term,
-            this.eclObject.fullTerm
-        );
-
-        this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
-            console.log('API eclString returned: ', dataString);
-            this.eclService.setEclString(dataString);
-        });
-    }
-
-    updateConjunctionExpression(): void {
-        const eclObject = new ECLConjunctionExpression([]);
-
-        this.eclObject.conjunctionExpressionConstraints.forEach(item => {
-            eclObject.conjunctionExpressionConstraints.push(new ECLExpression(
-                item.operator,
-                item.conceptId,
-                item.wildcard,
-                item.term,
-                item.fullTerm
-            ));
-        });
-
-        this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
-            console.log('API eclString returned: ', dataString);
-            this.eclService.setEclString(dataString);
-        });
-    }
-
-    updateDisjunctionExpression(): void {
-        const eclObject = new ECLDisjunctionExpression([]);
-
-        this.eclObject.disjunctionExpressionConstraints.forEach(item => {
-            eclObject.disjunctionExpressionConstraints.push(new ECLExpression(
-                item.operator,
-                item.conceptId,
-                item.wildcard,
-                item.term,
-                item.fullTerm
-            ));
-        });
-
-        this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
-            console.log('API eclString returned: ', dataString);
-            this.eclService.setEclString(dataString);
-        });
-    }
-
-    updateExpressionWithRefinement(): void {
-        const eclObject = new ECLExpressionWithRefinement(
-            new ECLExpression(
-                this.eclObject.subexpressionConstraint.operator,
-                this.eclObject.subexpressionConstraint.conceptId,
-                this.eclObject.subexpressionConstraint.wildcard,
-                this.eclObject.subexpressionConstraint.term,
-                this.eclObject.subexpressionConstraint.conceptId + ' |' + this.eclObject.subexpressionConstraint.term + '|'),
-            new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
-                new ECLExpression(
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.wildcard,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId + ' |'
-                    + this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term + '|'),
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator,
-                new ECLExpression(
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.wildcard,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term,
-                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId + ' |'
-                    + this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term + '|'),
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.reverse,
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.cardinalityMin
-            )))))
-        );
+        const eclObject = this.cloneObject(this.eclObject);
 
         this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
             console.log('API eclString returned: ', dataString);
@@ -194,58 +92,54 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     newFocusConceptRow(): void {
-        if (this.eclObject instanceof ECLExpression) {
+        if (this.eclObject.fullTerm) {
             this.convertExpressionToConjunction();
         }
 
-        if (this.eclObject instanceof ECLConjunctionExpression) {
+        if (this.eclObject.conjunctionExpressionConstraints) {
             this.eclObject.conjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
             this.eclService.setEclObject(this.eclObject);
-            this.updateConjunctionExpression();
-        } else if (this.eclObject instanceof ECLDisjunctionExpression) {
+            this.updateExpression();
+        } else if (this.eclObject.disjunctionExpressionConstraints) {
             this.eclObject.disjunctionExpressionConstraints.push(new ECLExpression('descendantof', '', false, '', ''));
             this.eclService.setEclObject(this.eclObject);
-            this.updateDisjunctionExpression();
+            this.updateExpression();
         }
     }
 
-    // newAttributeGroup(): void {
-    //     this.eclObject.attributeGroups.push([new AttributeSet()]);
-    // }
-    //
+    newAttributeGroup(): void {
+        if (this.eclObject.fullTerm) {
+            const refinement = this.eclService.convertExpressionToRefinement(this.eclObject);
+            this.eclService.setEclObject(refinement);
+            this.updateExpression();
+        }
+    }
+
     // newAttributeGroupRow(group): void {
-    //     group.push(new AttributeSet());
-    // }
-    //
-    // newExclusionGroup(): void {
-    //     this.eclObject.exclusionGroups.push([new AttributeSet()]);
-    // }
-    //
-    // newExclusionGroupRow(group): void {
     //     group.push(new AttributeSet());
     // }
 
     convertExpressionToConjunction(): void {
-        if (this.eclObject instanceof  ECLExpression) {
+        if (this.eclObject.fullTerm) {
             const conjunction = this.eclService.convertExpressionToConjunction(this.eclObject);
             this.eclService.setEclObject(conjunction);
-            this.updateConjunctionExpression();
+            this.updateExpression();
         }
     }
 
     convertConjunctionToDisjunction(): void {
-        if (this.eclObject instanceof ECLConjunctionExpression) {
+        if (this.eclObject.conjunctionExpressionConstraints) {
             const disjunction = this.eclService.convertConjunctionToDisjunction(this.eclObject);
             this.eclService.setEclObject(disjunction);
-            this.updateDisjunctionExpression();
+            this.updateExpression();
         }
     }
 
     convertDisjunctionToConjunction(): void {
-        if (this.eclObject instanceof ECLDisjunctionExpression) {
+        if (this.eclObject.disjunctionExpressionConstraints) {
             const conjunction = this.eclService.convertDisjunctionToConjunction(this.eclObject);
             this.eclService.setEclObject(conjunction);
-            this.updateConjunctionExpression();
+            this.updateExpression();
         }
     }
 
@@ -278,10 +172,14 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                response[i] =  '    '.repeat(whitespaceCount) + response[i].trim();
+                response[i] = '    '.repeat(whitespaceCount) + response[i].trim();
             }
 
             return response;
         }
+    }
+
+    cloneObject(object): any {
+        return JSON.parse(JSON.stringify(object));
     }
 }

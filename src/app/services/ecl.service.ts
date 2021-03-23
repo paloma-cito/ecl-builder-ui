@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {ECLConjunctionExpression, ECLDisjunctionExpression} from '../models/ecl';
+import {
+    Attribute,
+    EClAttributeSet,
+    ECLConjunctionExpression,
+    ECLDisjunctionExpression,
+    ECLExpression,
+    ECLExpressionWithRefinement, EClRefinement, SubAttributeSet, SubRefinement
+} from '../models/ecl';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +39,10 @@ export class EclService {
         return this.eclString.asObservable();
     }
 
+    createShortFormConcept(expression): string {
+        return expression.conceptId + ' |' + expression.term + '|';
+    }
+
     convertExpressionToConjunction(expression): ECLConjunctionExpression {
         return new ECLConjunctionExpression([expression]);
     }
@@ -42,5 +53,23 @@ export class EclService {
 
     convertConjunctionToDisjunction(conjunction): ECLDisjunctionExpression {
         return new ECLDisjunctionExpression(conjunction.conjunctionExpressionConstraints);
+    }
+
+    convertExpressionToRefinement(expression): ECLExpressionWithRefinement {
+        return new ECLExpressionWithRefinement(
+            new ECLExpression(
+                expression.operator,
+                expression.conceptId,
+                expression.wildcard,
+                expression.term,
+                expression.conceptId + ' |' + expression.term + '|'),
+            new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
+                new ECLExpression('descendantof', '', false, '', ''),
+                '=',
+                new ECLExpression('descendantof', '', false, '', ''),
+                false,
+                1
+            )))))
+        );
     }
 }

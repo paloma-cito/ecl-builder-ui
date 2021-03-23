@@ -1,22 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import {
-    Attribute,
-    EClAttributeSet,
-    ECLConjunctionExpression,
-    ECLDisjunctionExpression,
-    ECLExpression,
-    ECLExpressionWithRefinement, EClRefinement, SubAttributeSet, SubRefinement
-} from '../models/ecl';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression, ECLExpressionWithRefinement} from '../models/ecl';
+import {EclService} from './ecl.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private eclService: EclService) {
     }
 
     getTypeahead(url, term): Observable<any> {
@@ -36,55 +30,39 @@ export class HttpService {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
 
             if (response['conjunctionExpressionConstraints']) {
-                const models = new ECLConjunctionExpression([]);
+                const expression: ECLConjunctionExpression = this.cloneObject(response);
 
-                response['conjunctionExpressionConstraints'].forEach((item) => {
-                    models.conjunctionExpressionConstraints.push(new ECLExpression(item.operator,
-                        item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                expression.conjunctionExpressionConstraints.forEach(item => {
+                    item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
 
-                return models;
+                return expression;
             } else if (response['disjunctionExpressionConstraints']) {
-                const models = new ECLDisjunctionExpression([]);
+                const expression: ECLDisjunctionExpression = this.cloneObject(response);
 
-                response['disjunctionExpressionConstraints'].forEach((item) => {
-                    models.disjunctionExpressionConstraints.push(new ECLExpression(item.operator,
-                        item.conceptId, item.wildcard, item.term, item.conceptId + ' |' + item.term + '|'));
+                expression.disjunctionExpressionConstraints.forEach(item => {
+                    item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
 
-                return models;
-            } else  if (response['subexpressionConstraint']) {
-                const models = new ECLExpressionWithRefinement(
-                    new ECLExpression(
-                        response['subexpressionConstraint'].operator,
-                        response['subexpressionConstraint'].conceptId,
-                        response['subexpressionConstraint'].wildcard,
-                        response['subexpressionConstraint'].term,
-                        response['subexpressionConstraint'].conceptId + ' |' + response['subexpressionConstraint'].term + '|'),
-                    new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
-                            new ECLExpression(
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.wildcard,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId + ' |'
-                                + response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term + '|'),
-                            response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator,
-                            new ECLExpression(
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.wildcard,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term,
-                                response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId + ' |'
-                                + response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term + '|'),
-                            response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.reverse,
-                            response['eclRefinement'].subRefinement.eclAttributeSet.subAttributeSet.attribute.cardinalityMin
-                    )))))
-                );
+                return expression;
+            } else if (response['subexpressionConstraint']) {
+                const expression: ECLExpressionWithRefinement = this.cloneObject(response);
+                expression.subexpressionConstraint.fullTerm = this.eclService.createShortFormConcept(expression.subexpressionConstraint);
+                expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName);
+                expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value);
 
-                return models;
+                if (expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                    expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+                        item.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(item.attribute.attributeName);
+                        item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                    });
+                }
+
+                return expression;
             } else {
-                return new ECLExpression(response['operator'], response['conceptId'], response['wildcard'], response['term'], response['conceptId'] + ' |' + response['term'] + '|');
+                const expression: ECLExpression = this.cloneObject(response);
+                expression.fullTerm = this.eclService.createShortFormConcept(expression);
+                return expression;
             }
         }));
     }
@@ -98,21 +76,36 @@ export class HttpService {
     }
 
     removeFullTerms(eclObject): any {
-        if (eclObject instanceof ECLExpression) {
+        if (eclObject.fullTerm) {
             delete eclObject.fullTerm;
-        } else if (eclObject instanceof ECLConjunctionExpression) {
+        } else if (eclObject.conjunctionExpressionConstraints) {
             eclObject.conjunctionExpressionConstraints.forEach(item => {
                 delete item.fullTerm;
             });
-        } else if (eclObject instanceof ECLDisjunctionExpression) {
+        } else if (eclObject.disjunctionExpressionConstraints) {
             eclObject.disjunctionExpressionConstraints.forEach(item => {
                 delete item.fullTerm;
             });
-        } else if (eclObject instanceof ECLExpressionWithRefinement) {
+        } else if (eclObject.subexpressionConstraint) {
             delete eclObject.subexpressionConstraint.fullTerm;
-            delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm;
-            delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm;
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet) {
+                delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm;
+                delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm;
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+                    delete item.attribute.attributeName.fullTerm;
+                    delete item.attribute.value.fullTerm;
+                });
+            }
         }
+
         return eclObject;
+    }
+
+    cloneObject(object): any {
+        return JSON.parse(JSON.stringify(object));
     }
 }
