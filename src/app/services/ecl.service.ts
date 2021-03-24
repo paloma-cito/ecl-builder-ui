@@ -40,7 +40,11 @@ export class EclService {
     }
 
     createShortFormConcept(expression): string {
-        return expression.conceptId + ' |' + expression.term + '|';
+        if (expression.wildcard) {
+            return '*';
+        } else {
+            return expression.conceptId + ' |' + expression.term + '|';
+        }
     }
 
     convertExpressionToConjunction(expression): ECLConjunctionExpression {
