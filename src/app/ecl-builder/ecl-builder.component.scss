@@ -14,7 +14,7 @@ div.modal {
     letter-spacing: 0.5px;
 
     div.modal-dialog-centered {
-        width: 1024px;
+        width: 1280px;
         margin: 10vh auto;
 
         div.modal-content {
@@ -67,109 +67,50 @@ div.modal {
 
                 h3 {
                     font-size: 18px;
-                    margin: 0;
-                    padding: 10px;
+                    margin: 0 0 10px 0;
+                    padding: 10px 10px 0 10px;
                     font-weight: 300;
                     line-height: 20px;
                 }
 
-                button.add-group {
+                button {
                     background-color: #4EA24E;
                     border-radius: 16px;
                     border: none;
                     color: white;
-                    font-weight: 200;
                     padding: 4px 12px 4px 12px;
                     cursor: pointer;
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    font-weight: 400;
+                    font-size: 13px;
+                    height: 24px;
 
                     &:hover {
                         background-color: darken(#4EA24E, 5%);
                     }
                 }
 
-                div.focus-concept-section {
+                div.expression-section {
                     border-bottom: 1px solid #dee2e6;
                     position: relative;
 
-                    button.add-row {
-                        position: absolute;
-                        top: 42px;
-                        right: 16px;
-                        background-color: #4EA24E;
-                        border-radius: 12px;
-                        border: none;
-                        height: 24px;
-                        width: 24px;
-                        cursor: pointer;
-
-                        span {
-                            position: absolute;
-                            top: -3px;
-                            right: 6px;
-                            font-weight: 400;
-                            font-size: 20px;
-                            color: white;
-                        }
-
-                        &:hover {
-                            background-color: darken(#4EA24E, 5%);
-                        }
-                    }
-
-                    div.focus-concept-row {
-                        padding: 0 8px 8px 8px;
-
-                        select {
-                            padding: 2px 5px 2px 5px;
-                            height: 30px;
-                            border: 1px solid #C8CFD6;
-                            border-radius: 4px;
-                            margin-right: 8px;
-                            transform: translateY(1px);
-                            line-height: 26px;
-                            font-size: 16px;
-                            font-weight: 300;
-                        }
-
-                        p {
-                            display: inline-block;
-                            line-height: 30px;
-                            font-size: 16px;
-                            font-weight: 300;
-                            margin: 0 4px 0 0;
-                            padding: 0 12px 0 12px;
-                        }
-
-                        input[type='text'] {
-                            margin-right: 8px;
-                            padding: 0 4px 0 4px;
-                            height: 30px;
-                            font-size: 14px;
-                            border-radius: 4px;
-                            border: 1px solid #C8CFD6;
-                            width: 256px;
-                        }
-                    }
-                }
-
-                div.attribute-group-section {
-                    border-bottom: 1px solid #dee2e6;
-                    position: relative;
-
-                    div.attribute-group {
+                    div.expression-group {
+                        position: relative;
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#49A8DB, 30%);
                         border-radius: 8px;
-                        padding-bottom: 8px;
-                        margin: 0 8px 8px 8px;
+                        padding-top: 10px;
+                        margin: 20px;
 
-                        div.attribute-group-row {
+                        div.expression-row {
                             position: relative;
-                            margin: 8px;
-                            padding: 8px 8px 0 8px;
+                            padding: 0 10px 10px 10px;
+                            margin: 10px;
 
                             select {
-                                padding: 2px 5px 2px 5px;
+                                padding: 2px 10px 2px 5px;
                                 height: 30px;
                                 border: 1px solid #C8CFD6;
                                 border-radius: 4px;
@@ -177,7 +118,7 @@ div.modal {
                                 transform: translateY(1px);
                                 line-height: 26px;
                                 font-size: 16px;
-                                font-weight: 300;
+                                font-weight: 400;
                             }
 
                             p {
@@ -196,24 +137,10 @@ div.modal {
                                 font-size: 14px;
                                 border-radius: 4px;
                                 border: 1px solid #C8CFD6;
-                                width: 256px;
-                            }
-
-                            button.add-row {
-                                position: absolute;
-                                bottom: 8px;
-                                right: 8px;
+                                width: 400px;
+                                font-weight: 400;
                             }
                         }
-                    }
-
-                    button.add-group {
-                        position: absolute;
-                        top: 8px;
-                        right: 8px;
-                        font-weight: 400;
-                        font-size: 13px;
-                        height: 24px;
                     }
                 }
 
@@ -222,8 +149,8 @@ div.modal {
                         font-family: 'Courier New', serif;
                         font-size: 14px;
                         letter-spacing: normal;
-                        margin: 8px;
-                        padding: 8px;
+                        margin: 20px;
+                        padding: 10px;
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#E0E0E0, 10%);
                         border-radius: 8px;

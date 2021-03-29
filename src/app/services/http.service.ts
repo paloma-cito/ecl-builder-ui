@@ -76,6 +76,7 @@ export class HttpService {
 
     getModelToString(url, eclObject): Observable<any> {
         eclObject = this.removeFullTerms(eclObject);
+        eclObject = this.removeSelfOperator(eclObject);
 
         return this.http.post(url + '/util/ecl-model-to-string', eclObject).pipe(map(response => {
             return response['eclString'];
@@ -112,6 +113,64 @@ export class HttpService {
                 eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
                     delete item.attribute.attributeName.fullTerm;
                     delete item.attribute.value.fullTerm;
+                });
+            }
+        }
+
+        return eclObject;
+    }
+
+    removeSelfOperator(eclObject): any {
+        if (eclObject.operator === 'self') {
+            delete eclObject.operator;
+        } else if (eclObject.conjunctionExpressionConstraints) {
+            eclObject.conjunctionExpressionConstraints.forEach(item => {
+                if (item.operator === 'self') {
+                    delete item.operator;
+                }
+            });
+        } else if (eclObject.disjunctionExpressionConstraints) {
+            eclObject.disjunctionExpressionConstraints.forEach(item => {
+                if (item.operator === 'self') {
+                    delete item.operator;
+                }
+            });
+        } else if (eclObject.subexpressionConstraint) {
+            if (eclObject.operator === 'self') {
+                delete eclObject.subexpressionConstraint.operator;
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet) {
+                if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator === 'self') {
+                    delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator;
+                }
+
+                if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator === 'self') {
+                    delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator;
+                }
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+                    if (item.attribute.attributeName.operator === 'self') {
+                        delete item.attribute.attributeName.operator;
+                    }
+
+                    if (item.attribute.value.operator === 'self') {
+                        delete item.attribute.value.operator;
+                    }
+                });
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
+                    if (item.attribute.attributeName.operator === 'self') {
+                        delete item.attribute.attributeName.operator;
+                    }
+
+                    if (item.attribute.value.operator === 'self') {
+                        delete item.attribute.value.operator;
+                    }
                 });
             }
         }

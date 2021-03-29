@@ -52,18 +52,18 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         });
 
-        console.log('eclString IN: ', this.eclString);
+        // console.log('eclString IN: ', this.eclString);
 
         if (this.eclString) {
             this.eclService.setEclString(this.eclString);
 
             this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe((dataObject: any) => {
-                console.log('API eclModel returned: ', dataObject);
+                // console.log('API eclModel returned: ', dataObject);
                 this.eclService.setEclObject(dataObject);
                 this.updateExpression();
             });
         } else {
-            this.eclService.setEclObject(new ECLExpression('descendantof', '', false, '', ''));
+            this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
         }
     }
 
@@ -92,7 +92,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         const eclObject = this.cloneObject(this.eclObject);
 
         this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
-            console.log('API eclString returned: ', dataString);
+            // console.log('API eclString returned: ', dataString);
             this.eclService.setEclString(dataString);
         });
     }
@@ -130,9 +130,9 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
-    // newAttributeGroupRow(group): void {
-    //     group.push(new AttributeSet());
-    // }
+    newAttributeGroupRow(group): void {
+        console.log('group: ', group);
+    }
 
     convertExpressionToConjunction(): void {
         if (this.eclObject.fullTerm) {

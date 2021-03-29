@@ -9,80 +9,101 @@
             </div>
 
             <div class="modal-body">
-                <div *ngIf="eclObject" class="focus-concept-section">
+                <div *ngIf="eclObject" class="expression-section">
                     <h3>Focus Concept</h3>
-                    <ng-container *ngIf="eclObject?.operator">
-                        <div class="focus-concept-row">
-                            <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
-                                <option [value]="'descendantof'">Descendants</option>
-                                <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                <option [value]="'ancestorof'">Parents</option>
-                                <option [value]="'ancestororselfof'">Parents or self of</option>
-                            </select>
-                            <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
+                    <ng-container *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && !eclObject?.subexpressionConstraint">
+                        <div class="expression-group">
+                            <div class="expression-row">
+                                <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'descendantof'">Descendants</option>
+                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                    <option [value]="'ancestorof'">Parents</option>
+                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
+                            <button (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
-                        <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="focus-concept-row">
-                            <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
-                                <option value="AND" selected>AND</option>
-                                <option value="OR">OR</option>
-                            </select>
-                            <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
-                                <option [value]="'descendantof'">Descendants</option>
-                                <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                <option [value]="'ancestorof'">Parents</option>
-                                <option [value]="'ancestororselfof'">Parents or self of</option>
-                            </select>
-                            <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
+                        <div class="expression-group">
+                            <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="expression-row">
+                                <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
+                                    <option value="AND" selected>AND</option>
+                                    <option value="OR">OR</option>
+                                </select>
+                                <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'descendantof'">Descendants</option>
+                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                    <option [value]="'ancestorof'">Parents</option>
+                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
+                            <button (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
-                        <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="focus-concept-row">
-                            <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
-                                <option value="AND">AND</option>
-                                <option value="OR" selected>OR</option>
-                            </select>
-                            <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
-                                <option [value]="'descendantof'">Descendants</option>
-                                <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                <option [value]="'ancestorof'">Parents</option>
-                                <option [value]="'ancestororselfof'">Parents or self of</option>
-                            </select>
-                            <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
+                        <div class="expression-group">
+                            <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="expression-row">
+                                <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
+                                    <option value="AND">AND</option>
+                                    <option value="OR" selected>OR</option>
+                                </select>
+                                <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'descendantof'">Descendants</option>
+                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                    <option [value]="'ancestorof'">Parents</option>
+                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
+                            <button (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
-                        <div class="focus-concept-row">
-                            <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
-                                <option [value]="'descendantof'">Descendants</option>
-                                <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                <option [value]="'ancestorof'">Parents</option>
-                                <option [value]="'ancestororselfof'">Parents or self of</option>
-                            </select>
-                            <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
+                        <div class="expression-group">
+                            <div class="expression-row">
+                                <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'descendantof'">Descendants</option>
+                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                    <option [value]="'ancestorof'">Parents</option>
+                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                </select>
+                                <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
+                            </div>
                         </div>
                     </ng-container>
-                    <button *ngIf="!eclObject?.eclRefinement" class="add-row" (click)="newFocusConceptRow()"><span>+</span></button>
                 </div>
 
-                <div class="attribute-group-section">
-                    <h3>Attribute Group</h3>
-                    <button *ngIf="eclObject?.fullTerm" class="add-group" (click)="newAttributeGroup()">ADD GROUP</button>
+                <div class="expression-section">
+                    <h3>Refinements</h3>
+                    <button *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD GROUP</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
-                        <div class="attribute-group">
-                            <div class="attribute-group-row">
+                        <div class="expression-group">
+                            <div class="expression-row">
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                     <option [value]="'='">=</option>
                                     <option [value]="'!='">!=</option>
                                 </select>
+                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
+                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'descendantof'">Descendants</option>
+                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                    <option [value]="'ancestorof'">Parents</option>
+                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
-                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="attribute-group-row">
+                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="expression-row">
                                     <select (change)="convertConjunctionRefinementToDisjunctionRefinement()">
                                         <option value="AND" selected>AND</option>
                                         <option value="OR">OR</option>
@@ -93,12 +114,19 @@
                                         <option [value]="'='">=</option>
                                         <option [value]="'!='">!=</option>
                                     </select>
+                                    <select [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
+                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'descendantof'">Descendants</option>
+                                        <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                        <option [value]="'ancestorof'">Parents</option>
+                                        <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
-                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet" class="attribute-group-row">
+                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet" class="expression-row">
                                     <select (change)="convertDisjunctionRefinementToConjunctionRefinement()">
                                         <option value="AND">AND</option>
                                         <option value="OR" selected>OR</option>
@@ -109,12 +137,18 @@
                                         <option [value]="'='">=</option>
                                         <option [value]="'!='">!=</option>
                                     </select>
+                                    <select [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
+                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'descendantof'">Descendants</option>
+                                        <option [value]="'descendantorselfof'">Descendants or self of</option>
+                                        <option [value]="'ancestorof'">Parents</option>
+                                        <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
                                 </div>
                             </ng-container>
-
-<!--                            <button class="add-row" (click)="newAttributeGroupRow(group)">+</button>-->
+<!--                            <button (click)="newAttributeGroupRow(null)">ADD ROW</button>-->
                         </div>
                     </ng-container>
                 </div>
