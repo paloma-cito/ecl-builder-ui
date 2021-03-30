@@ -12,7 +12,7 @@
                 <div *ngIf="eclObject" class="expression-section">
                     <h3>Focus Concept</h3>
                     <ng-container *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && !eclObject?.subexpressionConstraint">
-                        <div class="expression-group">
+                        <div class="expression-group grey">
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
@@ -27,7 +27,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
-                        <div class="expression-group">
+                        <div class="expression-group grey">
                             <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="expression-row">
                                 <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
                                     <option value="AND" selected>AND</option>
@@ -46,7 +46,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
-                        <div class="expression-group">
+                        <div class="expression-group grey">
                             <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="expression-row">
                                 <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
                                     <option value="AND">AND</option>
@@ -65,7 +65,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
-                        <div class="expression-group">
+                        <div class="expression-group grey">
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
@@ -84,7 +84,7 @@
                     <h3>Refinements</h3>
                     <button *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD GROUP</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
-                        <div class="expression-group">
+                        <div class="expression-group blue">
                             <div class="expression-row">
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>

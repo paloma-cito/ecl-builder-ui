@@ -99,10 +99,17 @@ div.modal {
                     div.expression-group {
                         position: relative;
                         border: 1px solid #C8CFD6;
-                        background-color: lighten(#49A8DB, 30%);
                         border-radius: 8px;
                         padding-top: 10px;
                         margin: 20px;
+
+                        &.blue {
+                            background-color: lighten(#49A8DB, 30%);
+                        }
+
+                        &.grey {
+                            background-color: #F5E6E6;
+                        }
 
                         div.expression-row {
                             position: relative;
