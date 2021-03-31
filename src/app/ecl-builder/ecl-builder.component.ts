@@ -117,8 +117,16 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
-    removeFocusConceptRow(row): void {
-        console.log('row: ', row);
+    removeFocusConceptRow(index): void {
+        if (this.eclObject.conjunctionExpressionConstraints) {
+            this.eclObject.conjunctionExpressionConstraints.splice(index, 1);
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        } else if (this.eclObject.disjunctionExpressionConstraints) {
+            this.eclObject.disjunctionExpressionConstraints.splice(index, 1);
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        }
     }
 
     newAttributeGroup(): void {

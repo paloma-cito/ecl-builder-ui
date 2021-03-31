@@ -35,7 +35,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
                         <div class="expression-group grey">
-                            <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first" class="expression-row">
+                            <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first; let i = index" class="expression-row">
                                 <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
                                     <option value="AND" selected>AND</option>
                                     <option value="OR">OR</option>
@@ -53,14 +53,14 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
-                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(conj)"><span>&#8722;</span></button>
+                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span></button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
                         <div class="expression-group grey">
-                            <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first" class="expression-row">
+                            <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first; let i = index" class="expression-row">
                                 <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
                                     <option value="AND">AND</option>
                                     <option value="OR" selected>OR</option>
@@ -78,7 +78,7 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
-                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(disj)"><span>&#8722;</span></button>
+                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span></button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
                         </div>
