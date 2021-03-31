@@ -85,6 +85,18 @@ div.modal {
                     font-weight: 400;
                     font-size: 13px;
                     height: 24px;
+                    outline: none;
+
+                    &.circle {
+                        width: 24px;
+                        line-height: 20px;
+                        padding: 0;
+                        top: 3px;
+
+                        span {
+                            font-size: 23px;
+                        }
+                    }
 
                     &.green {
                         background-color: #4EA24E;
@@ -99,6 +111,15 @@ div.modal {
 
                         &:hover {
                             background-color: darken(#A060AE, 5%);
+                        }
+                    }
+
+                    &.red {
+                        right: 40px;
+                        background-color: #EB4C59;
+
+                        &:hover {
+                            background-color: darken(#EB4C59, 5%);
                         }
                     }
                 }
@@ -177,6 +198,7 @@ div.modal {
             }
 
             div.modal-footer {
+                margin: 0;
                 background-color: white;
                 border-top: 1px solid #dee2e6;
                 border-bottom-left-radius: 6px;

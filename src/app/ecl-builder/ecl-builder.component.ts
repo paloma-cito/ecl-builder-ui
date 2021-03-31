@@ -117,6 +117,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
+    removeFocusConceptRow(row): void {
+        console.log('row: ', row);
+    }
+
     newAttributeGroup(): void {
         if (this.eclObject.fullTerm) {
             const refinement = this.eclService.convertExpressionToRefinement(this.eclObject);
@@ -127,6 +131,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     newAttributeGroupRow(group): void {
         console.log('group: ', group);
+    }
+
+    removeAttributeGroupRow(row): void {
+        console.log('row:', row);
     }
 
     convertExpressionToConjunction(): void {
@@ -175,8 +183,9 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
-    clear() {
+    clear(): void {
         this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
+        this.eclService.setEclString('');
     }
 
     ECLexpressionBuilder(expression: string): any {

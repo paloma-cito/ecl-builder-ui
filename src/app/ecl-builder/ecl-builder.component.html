@@ -28,8 +28,9 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
+                                <button *ngIf="eclObject?.fullTerm" class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
-                            <button *ngIf="eclObject?.fullTerm" class="green" (click)="newFocusConceptRow()">ADD ROW</button>
+
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
@@ -52,8 +53,9 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
+                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(conj)"><span>&#8722;</span></button>
+                                <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
-                            <button class="green" (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
@@ -76,8 +78,9 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
+                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(disj)"><span>&#8722;</span></button>
+                                <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
-                            <button class="green" (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
@@ -127,6 +130,8 @@
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
                                 <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="expression-row">
@@ -154,6 +159,8 @@
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                    <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                    <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
@@ -182,9 +189,10 @@
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                    <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                    <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
                             </ng-container>
-<!--                            <button (click)="newAttributeGroupRow(null)">ADD ROW</button>-->
                         </div>
                     </ng-container>
                 </div>
@@ -192,7 +200,7 @@
                     <h3>Output</h3>
 <!--                    <p class="output">{{eclObject | json}}</p>-->
 <!--                    <p class="output">{{eclString}}</p>-->
-                    <p class="output">
+                    <p *ngIf="eclString" class="output">
                         <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>
                     </p>
 
