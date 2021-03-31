@@ -16,10 +16,15 @@
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
-                                    <option [value]="'descendantof'">Descendants</option>
-                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                    <option [value]="'ancestorof'">Parents</option>
-                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    <option [value]="'descendantof'">< Descendant of</option>
+                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'childof'">&lt;! Child of</option>
+<!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                    <option [value]="'ancestorof'">> Ancestor of</option>
+                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                    <option [value]="'parentof'">>! Parent of</option>
+<!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                    <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
@@ -35,10 +40,15 @@
                                 </select>
                                 <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
-                                    <option [value]="'descendantof'">Descendants</option>
-                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                    <option [value]="'ancestorof'">Parents</option>
-                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    <option [value]="'descendantof'">< Descendant of</option>
+                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'childof'">&lt;! Child of</option>
+<!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                    <option [value]="'ancestorof'">> Ancestor of</option>
+                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                    <option [value]="'parentof'">>! Parent of</option>
+<!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                    <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
@@ -54,10 +64,15 @@
                                 </select>
                                 <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
-                                    <option [value]="'descendantof'">Descendants</option>
-                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                    <option [value]="'ancestorof'">Parents</option>
-                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    <option [value]="'descendantof'">< Descendant of</option>
+                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'childof'">&lt;! Child of</option>
+<!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                    <option [value]="'ancestorof'">> Ancestor of</option>
+                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                    <option [value]="'parentof'">>! Parent of</option>
+<!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                    <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
@@ -69,10 +84,15 @@
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
-                                    <option [value]="'descendantof'">Descendants</option>
-                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                    <option [value]="'ancestorof'">Parents</option>
-                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    <option [value]="'descendantof'">< Descendant of</option>
+                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'childof'">&lt;! Child of</option>
+<!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                    <option [value]="'ancestorof'">> Ancestor of</option>
+                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                    <option [value]="'parentof'">>! Parent of</option>
+<!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                    <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
@@ -82,7 +102,7 @@
 
                 <div class="expression-section">
                     <h3>Refinements</h3>
-                    <button *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD GROUP</button>
+                    <button *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD REFINEMENT</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="expression-group blue">
                             <div class="expression-row">
@@ -94,10 +114,15 @@
                                 </select>
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'" selected>Self</option>
-                                    <option [value]="'descendantof'">Descendants</option>
-                                    <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                    <option [value]="'ancestorof'">Parents</option>
-                                    <option [value]="'ancestororselfof'">Parents or self of</option>
+                                    <option [value]="'descendantof'">< Descendant of</option>
+                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'childof'">&lt;! Child of</option>
+<!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                    <option [value]="'ancestorof'">> Ancestor of</option>
+                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                    <option [value]="'parentof'">>! Parent of</option>
+<!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                    <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
                                        (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
@@ -116,10 +141,15 @@
                                     </select>
                                     <select [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
                                         <option [value]="'self'" selected>Self</option>
-                                        <option [value]="'descendantof'">Descendants</option>
-                                        <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                        <option [value]="'ancestorof'">Parents</option>
-                                        <option [value]="'ancestororselfof'">Parents or self of</option>
+                                        <option [value]="'descendantof'">< Descendant of</option>
+                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'childof'">&lt;! Child of</option>
+<!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                        <option [value]="'ancestorof'">> Ancestor of</option>
+                                        <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                        <option [value]="'parentof'">>! Parent of</option>
+<!--                                        <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                        <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
@@ -139,10 +169,15 @@
                                     </select>
                                     <select [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
                                         <option [value]="'self'" selected>Self</option>
-                                        <option [value]="'descendantof'">Descendants</option>
-                                        <option [value]="'descendantorselfof'">Descendants or self of</option>
-                                        <option [value]="'ancestorof'">Parents</option>
-                                        <option [value]="'ancestororselfof'">Parents or self of</option>
+                                        <option [value]="'descendantof'">< Descendant of</option>
+                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'childof'">&lt;! Child of</option>
+<!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                        <option [value]="'ancestorof'">> Ancestor of</option>
+                                        <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                        <option [value]="'parentof'">>! Parent of</option>
+<!--                                        <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                        <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
