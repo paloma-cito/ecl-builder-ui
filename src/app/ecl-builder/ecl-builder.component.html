@@ -11,6 +11,7 @@
             <div class="modal-body">
                 <div *ngIf="eclObject" class="expression-section">
                     <h3>Focus Concept</h3>
+                    <button class="purple" (click)="clear()">CLEAR</button>
                     <ng-container *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && !eclObject?.subexpressionConstraint">
                         <div class="expression-group grey">
                             <div class="expression-row">
@@ -28,7 +29,7 @@
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
-                            <button (click)="newFocusConceptRow()">ADD ROW</button>
+                            <button *ngIf="eclObject?.fullTerm" class="green" (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
@@ -52,7 +53,7 @@
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
-                            <button (click)="newFocusConceptRow()">ADD ROW</button>
+                            <button class="green" (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
@@ -76,7 +77,7 @@
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
                             </div>
-                            <button (click)="newFocusConceptRow()">ADD ROW</button>
+                            <button class="green" (click)="newFocusConceptRow()">ADD ROW</button>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
@@ -102,7 +103,7 @@
 
                 <div class="expression-section">
                     <h3>Refinements</h3>
-                    <button *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD REFINEMENT</button>
+                    <button class="green" *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD REFINEMENT</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="expression-group blue">
                             <div class="expression-row">

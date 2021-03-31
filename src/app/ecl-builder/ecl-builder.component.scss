@@ -74,7 +74,6 @@ div.modal {
                 }
 
                 button {
-                    background-color: #4EA24E;
                     border-radius: 16px;
                     border: none;
                     color: white;
@@ -87,8 +86,20 @@ div.modal {
                     font-size: 13px;
                     height: 24px;
 
-                    &:hover {
-                        background-color: darken(#4EA24E, 5%);
+                    &.green {
+                        background-color: #4EA24E;
+
+                        &:hover {
+                            background-color: darken(#4EA24E, 5%);
+                        }
+                    }
+
+                    &.purple {
+                        background-color: #A060AE;
+
+                        &:hover {
+                            background-color: darken(#A060AE, 5%);
+                        }
                     }
                 }
 

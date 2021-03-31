@@ -1,10 +1,5 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {
-    ECLConjunctionExpression,
-    ECLDisjunctionExpression,
-    ECLExpression,
-    ECLExpressionWithRefinement
-} from '../models/ecl';
+import {ECLExpression} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -63,7 +58,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 this.updateExpression();
             });
         } else {
-            this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
+            this.clear();
         }
     }
 
@@ -178,6 +173,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         }
+    }
+
+    clear() {
+        this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
     }
 
     ECLexpressionBuilder(expression: string): any {
