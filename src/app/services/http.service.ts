@@ -59,23 +59,27 @@ export class HttpService {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
 
             if (response['conjunctionExpressionConstraints']) {
-                const expression: ECLConjunctionExpression = this.cloneObject(response);
+                let expression: ECLConjunctionExpression = this.cloneObject(response);
 
                 expression.conjunctionExpressionConstraints.forEach(item => {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
+                
+                expression = this.addSelfOperator(expression);
 
                 return expression;
             } else if (response['disjunctionExpressionConstraints']) {
-                const expression: ECLDisjunctionExpression = this.cloneObject(response);
+                let expression: ECLDisjunctionExpression = this.cloneObject(response);
 
                 expression.disjunctionExpressionConstraints.forEach(item => {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
 
+                expression = this.addSelfOperator(expression);
+                
                 return expression;
             } else if (response['subexpressionConstraint']) {
-                const expression: ECLExpressionWithRefinement = this.cloneObject(response);
+                let expression: ECLExpressionWithRefinement = this.cloneObject(response);
                 expression.subexpressionConstraint.fullTerm = this.eclService.createShortFormConcept(expression.subexpressionConstraint);
                 expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName);
                 expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value);
@@ -93,11 +97,14 @@ export class HttpService {
                         item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
                     });
                 }
-
+                
+                expression = this.addSelfOperator(expression);
+                
                 return expression;
             } else {
-                const expression: ECLExpression = this.cloneObject(response);
+                let expression: ECLExpression = this.cloneObject(response);
                 expression.fullTerm = this.eclService.createShortFormConcept(expression);
+                expression = this.addSelfOperator(expression);
                 return expression;
             }
         }));
@@ -148,6 +155,64 @@ export class HttpService {
 
         return eclObject;
     }
+    
+    addSelfOperator(eclObject): any {
+        if (!eclObject.operator) {
+            eclObject.operator = 'self';
+        } else if (eclObject.conjunctionExpressionConstraints) {
+            eclObject.conjunctionExpressionConstraints.forEach(item => {
+                if (!item.operator) {
+                    item.operator = 'self';
+                }
+            });
+        } else if (eclObject.disjunctionExpressionConstraints) {
+            eclObject.disjunctionExpressionConstraints.forEach(item => {
+                if (!item.operator) {
+                    item.operator = 'self';
+                }
+            });
+        } else if (eclObject.subexpressionConstraint) {
+            if (!eclObject.subexpressionConstraint.operator) {
+                eclObject.subexpressionConstraint.operator = 'self';
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet) {
+                if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator) {
+                    eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator = 'self';
+                }
+
+                if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
+                    eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator = 'self';
+                }
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+                    if (!item.attribute.attributeName.operator) {
+                        item.attribute.attributeName.operator = 'self';
+                    }
+
+                    if (!item.attribute.value.operator) {
+                        item.attribute.value.operator = 'self';
+                    }
+                });
+            }
+
+            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
+                    if (!item.attribute.attributeName.operator) {
+                        item.attribute.attributeName.operator = 'self';
+                    }
+
+                    if (!item.attribute.value.operator) {
+                        item.attribute.value.operator = 'self';
+                    }
+                });
+            }
+        }
+
+        return eclObject;
+    }
 
     removeSelfOperator(eclObject): any {
         if (eclObject.operator === 'self') {
@@ -165,7 +230,7 @@ export class HttpService {
                 }
             });
         } else if (eclObject.subexpressionConstraint) {
-            if (eclObject.operator === 'self') {
+            if (eclObject.subexpressionConstraint.operator === 'self') {
                 delete eclObject.subexpressionConstraint.operator;
             }
 

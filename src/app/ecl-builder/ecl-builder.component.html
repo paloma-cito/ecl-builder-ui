@@ -234,7 +234,7 @@
                 </div>
                 <div class="output-section">
                     <h3>Output</h3>
-                    <p class="output">{{eclObject | json}}</p>
+<!--                    <p class="output">{{eclObject | json}}</p>-->
 <!--                    <p class="output">{{eclString}}</p>-->
                     <p *ngIf="eclString" class="output">
                         <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>
