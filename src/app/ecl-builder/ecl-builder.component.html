@@ -123,7 +123,7 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
-                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId)" placement="bottom"/>
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                     <option [value]="'='">=</option>
                                     <option [value]="'!='">!=</option>
@@ -141,7 +141,7 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                       (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" [ngbTypeahead]="searchMrcmTarget(eclObject)" placement="bottom"/>
                                 <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
                                 <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                             </div>
@@ -164,7 +164,7 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
-                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId)" placement="bottom"/>
                                     <select [(ngModel)]="conjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                         <option [value]="'='">=</option>
                                         <option [value]="'!='">!=</option>
@@ -182,7 +182,7 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
-                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                           (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="searchMrcmTarget(eclObject, 'conjunction')" placement="bottom"/>
                                     <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
                                     <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
@@ -206,7 +206,7 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.fullTerm"
-                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="search" placement="bottom"/>
+                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)" [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId)" placement="bottom"/>
                                     <select [(ngModel)]="disjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                         <option [value]="'='">=</option>
                                         <option [value]="'!='">!=</option>
@@ -224,7 +224,7 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
-                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="search" placement="bottom"/>
+                                           (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="searchMrcmTarget(eclObject, 'disjunction')" placement="bottom"/>
                                     <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
                                     <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
@@ -234,7 +234,7 @@
                 </div>
                 <div class="output-section">
                     <h3>Output</h3>
-<!--                    <p class="output">{{eclObject | json}}</p>-->
+                    <p class="output">{{eclObject | json}}</p>
 <!--                    <p class="output">{{eclString}}</p>-->
                     <p *ngIf="eclString" class="output">
                         <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>

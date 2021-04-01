@@ -25,6 +25,35 @@ export class HttpService {
                 return typeaheads;
             }));
     }
+    
+    getMrcmType(url, term, conceptId): Observable<any> {
+        return this.http.get(url + '/mrcm/MAIN/domain-attributes?expand=pt(),fsn()&limit=50&parentIds=' + conceptId)
+            .pipe(map(response => {
+                const typeaheads = [];
+
+                response['items'].forEach((item) => {
+                    if(item.fsn.term.toLowerCase().includes(term)){
+                        typeaheads.push(item.id + ' |' + item.fsn.term + '|');
+                    }
+                });
+
+                return typeaheads;
+            }));
+    }
+    
+    getMrcmTarget(url, term, conceptId): Observable<any> {
+    console.log(conceptId);
+        return this.http.get(url + '/mrcm/MAIN/attribute-values/' + conceptId + '?expand=fsn()&limit=50&termPrefix=' + term)
+            .pipe(map(response => {
+                const typeaheads = [];
+
+                response['items'].forEach((item) => {
+                    typeaheads.push(item.id + ' |' + item.fsn.term + '|');
+                });
+
+                return typeaheads;
+            }));
+    }
 
     getStringToModel(url, eclString): Observable<any> {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {

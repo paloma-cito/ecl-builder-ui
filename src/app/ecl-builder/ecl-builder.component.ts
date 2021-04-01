@@ -32,6 +32,42 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         })
     )
+    
+    searchMrcmType(parentId): (text$: Observable<string>) => Observable<any[]> {
+        return (text$: Observable<string>) => text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(term => {
+                if (term.length < 3) {
+                    return [];
+                } else {
+                    return this.httpService.getMrcmType(this.apiUrl, term, parentId);
+                }
+            })
+        );
+    }
+    
+    searchMrcmTarget(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
+        return (text$: Observable<string>) => text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(term => {
+                if (term.length < 3) {
+                    return [];
+                } else {
+                    if(!typeId){
+                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId);
+                    }
+                    else if(typeId === 'conjunction'){
+                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.attribute.attributeName.conceptId);
+                    }
+                    else if(typeId === 'disjunction'){
+                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.attribute.attributeName.conceptId);
+                    } 
+                }
+            })
+        );
+    }
 
     constructor(private el: ElementRef, private httpService: HttpService, private eclService: EclService) {
         this.element = el.nativeElement;
