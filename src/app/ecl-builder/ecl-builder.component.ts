@@ -14,6 +14,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     element: any;
     @Input() apiUrl: string;
+    @Input() branch: string;
     @Output() output = new EventEmitter();
 
     eclObject: any;
@@ -28,7 +29,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             if (term.length < 3) {
                 return [];
             } else {
-                return this.httpService.getTypeahead(this.apiUrl, term);
+                return this.httpService.getTypeahead(this.apiUrl, this.branch, term);
             }
         })
     )
@@ -41,7 +42,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 if (term.length < 3) {
                     return [];
                 } else {
-                    return this.httpService.getMrcmType(this.apiUrl, term, parentId);
+                    return this.httpService.getMrcmType(this.apiUrl, this.branch, term, parentId);
                 }
             })
         );
@@ -56,13 +57,13 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                     return [];
                 } else {
                     if(!typeId){
-                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId);
+                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId);
                     }
                     else if(typeId === 'conjunction'){
-                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.attribute.attributeName.conceptId);
+                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.attribute.attributeName.conceptId);
                     }
                     else if(typeId === 'disjunction'){
-                        return this.httpService.getMrcmTarget(this.apiUrl, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.attribute.attributeName.conceptId);
+                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.attribute.attributeName.conceptId);
                     } 
                 }
             })

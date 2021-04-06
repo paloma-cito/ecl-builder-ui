@@ -13,8 +13,8 @@ export class HttpService {
     constructor(private http: HttpClient, private eclService: EclService) {
     }
 
-    getTypeahead(url, term): Observable<any> {
-        return this.http.get(url + '/MAIN/concepts?activeFilter=true&termActive=true&limit=20&term=' + term)
+    getTypeahead(url, branch, term): Observable<any> {
+        return this.http.get(url + '/' + branch + '/concepts?activeFilter=true&termActive=true&limit=20&term=' + term)
             .pipe(map(response => {
                 const typeaheads = [];
 
@@ -26,8 +26,8 @@ export class HttpService {
             }));
     }
     
-    getMrcmType(url, term, conceptId): Observable<any> {
-        return this.http.get(url + '/mrcm/MAIN/domain-attributes?expand=pt(),fsn()&limit=50&parentIds=' + conceptId)
+    getMrcmType(url, branch, term, conceptId): Observable<any> {
+        return this.http.get(url + '/mrcm/' + branch + '/domain-attributes?expand=pt(),fsn()&limit=50&parentIds=' + conceptId)
             .pipe(map(response => {
                 const typeaheads = [];
 
@@ -41,9 +41,9 @@ export class HttpService {
             }));
     }
     
-    getMrcmTarget(url, term, conceptId): Observable<any> {
+    getMrcmTarget(url, branch, term, conceptId): Observable<any> {
     console.log(conceptId);
-        return this.http.get(url + '/mrcm/MAIN/attribute-values/' + conceptId + '?expand=fsn()&limit=50&termPrefix=' + term)
+        return this.http.get(url + '/mrcm/' + branch + '/attribute-values/' + conceptId + '?expand=fsn()&limit=50&termPrefix=' + term)
             .pipe(map(response => {
                 const typeaheads = [];
 
