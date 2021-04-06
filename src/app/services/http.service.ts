@@ -100,7 +100,7 @@ export class HttpService {
                 
                 expression = this.addSelfOperator(expression);
                 
-                return expression;
+                return this.addSelfOperator(expression);
             } else {
                 let expression: ECLExpression = this.cloneObject(response);
                 expression.fullTerm = this.eclService.createShortFormConcept(expression);
@@ -114,7 +114,7 @@ export class HttpService {
         eclObject = this.removeFullTerms(eclObject);
         eclObject = this.removeSelfOperator(eclObject);
 
-        return this.http.post(url + '/util/ecl-model-to-string', eclObject).pipe(map(response => {
+        return this.http.post(url + '/util/ecl-model-to-string', this.removeSelfOperator(eclObject)).pipe(map(response => {
             return response['eclString'];
         }));
     }
@@ -157,37 +157,38 @@ export class HttpService {
     }
     
     addSelfOperator(eclObject): any {
-        if (!eclObject.operator) {
-            eclObject.operator = 'self';
-        } else if (eclObject.conjunctionExpressionConstraints) {
-            eclObject.conjunctionExpressionConstraints.forEach(item => {
+        let expression: any = this.cloneObject(eclObject);
+        if (!expression.operator) {
+            expression.operator = 'self';
+        } else if (expression.conjunctionExpressionConstraints) {
+            expression.conjunctionExpressionConstraints.forEach(item => {
                 if (!item.operator) {
                     item.operator = 'self';
                 }
             });
-        } else if (eclObject.disjunctionExpressionConstraints) {
-            eclObject.disjunctionExpressionConstraints.forEach(item => {
+        } else if (expression.disjunctionExpressionConstraints) {
+            expression.disjunctionExpressionConstraints.forEach(item => {
                 if (!item.operator) {
                     item.operator = 'self';
                 }
             });
-        } else if (eclObject.subexpressionConstraint) {
-            if (!eclObject.subexpressionConstraint.operator) {
-                eclObject.subexpressionConstraint.operator = 'self';
+        } else if (expression.subexpressionConstraint) {
+            if (!expression.subexpressionConstraint.operator) {
+                expression.subexpressionConstraint.operator = 'self';
             }
 
-            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet) {
-                if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator) {
-                    eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator = 'self';
+            if (expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet) {
+                if (!expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator) {
+                    expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator = 'self';
                 }
 
-                if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
-                    eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator = 'self';
+                if (!expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
+                    expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator = 'self';
                 }
             }
 
-            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
-                eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
+            if (expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
                     if (!item.attribute.attributeName.operator) {
                         item.attribute.attributeName.operator = 'self';
                     }
@@ -198,8 +199,8 @@ export class HttpService {
                 });
             }
 
-            if (eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
-                eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
+            if (expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
                     if (!item.attribute.attributeName.operator) {
                         item.attribute.attributeName.operator = 'self';
                     }
@@ -210,8 +211,7 @@ export class HttpService {
                 });
             }
         }
-
-        return eclObject;
+        return expression;
     }
 
     removeSelfOperator(eclObject): any {
