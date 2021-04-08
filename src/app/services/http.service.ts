@@ -65,9 +65,8 @@ export class HttpService {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
                 
-                expression = this.addSelfOperator(expression);
 
-                return expression;
+                return this.addSelfOperator(expression);
             } else if (response['disjunctionExpressionConstraints']) {
                 let expression: ECLDisjunctionExpression = this.cloneObject(response);
 
@@ -75,9 +74,8 @@ export class HttpService {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
 
-                expression = this.addSelfOperator(expression);
                 
-                return expression;
+                return this.addSelfOperator(expression);
             } else if (response['subexpressionConstraint']) {
                 let expression: ECLExpressionWithRefinement = this.cloneObject(response);
                 expression.subexpressionConstraint.fullTerm = this.eclService.createShortFormConcept(expression.subexpressionConstraint);
@@ -98,14 +96,12 @@ export class HttpService {
                     });
                 }
                 
-                expression = this.addSelfOperator(expression);
                 
                 return this.addSelfOperator(expression);
             } else {
                 let expression: ECLExpression = this.cloneObject(response);
                 expression.fullTerm = this.eclService.createShortFormConcept(expression);
-                expression = this.addSelfOperator(expression);
-                return expression;
+                return this.addSelfOperator(expression);
             }
         }));
     }

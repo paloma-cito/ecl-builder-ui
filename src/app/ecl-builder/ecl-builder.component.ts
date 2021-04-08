@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
-import {ECLExpression} from '../models/ecl';
+import {ECLExpression, SubAttributeSet, Attribute} from '../models/ecl';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
@@ -174,12 +174,59 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
-    newAttributeGroupRow(group): void {
-        console.log('group: ', group);
+    newAttributeGroupRow(): void {
+        if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && ! this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+            const conjunction = this.eclService.convertRefinementToConjunction(this.eclObject);
+            this.eclService.setEclObject(conjunction);
+            this.updateExpression();
+        }
+
+        else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet && this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.push(new SubAttributeSet(new Attribute(
+                    new ECLExpression(),
+                    '=',
+                    new ECLExpression(),
+                    false,
+                    1
+                )));
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        } else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.push(new SubAttributeSet(new Attribute(
+                    new ECLExpression(),
+                    '=',
+                    new ECLExpression(),
+                    false,
+                    1
+                )));
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        }
+        
     }
 
-    removeAttributeGroupRow(row): void {
-        console.log('row:', row);
+    removeAttributeGroupRow(type?, index?): void {
+        if(!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && ! this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet){
+            const expression = this.eclService.convertRefinementToExpression(this.eclObject);
+            this.eclService.setEclObject(expression);
+            this.updateExpression();
+        }
+        if(type === 'conjunction'){
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.splice(index, 1);
+            if(this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.length === 0){
+                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet;
+            }
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        }
+        if(type === 'disjunction'){
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.splice(index, 1);
+            if(this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.length === 0){
+                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet;
+            }
+            this.eclService.setEclObject(this.eclObject);
+            this.updateExpression();
+        }
     }
 
     convertExpressionToConjunction(): void {

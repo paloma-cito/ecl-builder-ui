@@ -50,6 +50,34 @@ export class EclService {
     convertExpressionToConjunction(expression): ECLConjunctionExpression {
         return new ECLConjunctionExpression([expression]);
     }
+    
+    convertRefinementToConjunction(expression): ECLExpressionWithRefinement {
+        return new ECLExpressionWithRefinement(
+            new ECLExpression(
+                expression.subexpressionConstraint.operator,
+                expression.subexpressionConstraint.conceptId,
+                expression.subexpressionConstraint.wildcard,
+                expression.subexpressionConstraint.term,
+                this.createShortFormConcept(expression.subexpressionConstraint)),
+            new EClRefinement(new SubRefinement(new EClAttributeSet(
+                    new SubAttributeSet(new Attribute(
+                        new ECLExpression(),
+                        '=',
+                        new ECLExpression(),
+                        false,
+                        1
+                    )), 
+                    [new SubAttributeSet(new Attribute(
+                        new ECLExpression(),
+                        '=',
+                        new ECLExpression(),
+                        false,
+                        1
+                    ))]
+                )
+            ))
+        );
+    }
 
     convertDisjunctionToConjunction(disjunction): ECLConjunctionExpression {
         return new ECLConjunctionExpression(disjunction.disjunctionExpressionConstraints);
@@ -74,6 +102,26 @@ export class EclService {
                 false,
                 1
             )))))
+        );
+    }
+    convertRefinementToExpression(expression): ECLExpression {
+        const originalExpression = expression.subexpressionConstraint;
+        return new ECLExpression(
+                expression.operator,
+                expression.conceptId,
+                expression.wildcard,
+                expression.term,
+                this.createShortFormConcept(originalExpression)
+        );
+    }
+    getAdditionalRefinement(): EClRefinement {
+        return new EClRefinement(new SubRefinement(new EClAttributeSet(new SubAttributeSet(new Attribute(
+                new ECLExpression(),
+                '=',
+                new ECLExpression(),
+                false,
+                1
+            ))))
         );
     }
 }

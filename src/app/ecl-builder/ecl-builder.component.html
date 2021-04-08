@@ -146,7 +146,7 @@
                                 <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
-                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet" class="expression-row">
+                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let i = index" class="expression-row">
                                     <select (change)="convertConjunctionRefinementToDisjunctionRefinement()">
                                         <option value="AND" selected>AND</option>
                                         <option value="OR">OR</option>
@@ -183,12 +183,12 @@
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)" [ngbTypeahead]="searchMrcmTarget(eclObject, 'conjunction')" placement="bottom"/>
-                                    <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                    <button class="circle red" (click)="removeAttributeGroupRow('conjunction', i)"><span>&#8722;</span></button>
                                     <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
-                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet" class="expression-row">
+                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet; let i = index" class="expression-row">
                                     <select (change)="convertDisjunctionRefinementToConjunctionRefinement()">
                                         <option value="AND">AND</option>
                                         <option value="OR" selected>OR</option>
@@ -225,7 +225,7 @@
                                     </select>
                                     <input type="text" placeholder="Search..." [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
                                            (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)" [ngbTypeahead]="searchMrcmTarget(eclObject, 'disjunction')" placement="bottom"/>
-                                    <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                    <button class="circle red" (click)="removeAttributeGroupRow('disjunction', i)"><span>&#8722;</span></button>
                                     <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                                 </div>
                             </ng-container>
