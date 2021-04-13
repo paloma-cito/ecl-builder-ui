@@ -107,10 +107,10 @@ export class EclService {
     convertRefinementToExpression(expression): ECLExpression {
         const originalExpression = expression.subexpressionConstraint;
         return new ECLExpression(
-                expression.operator,
-                expression.conceptId,
-                expression.wildcard,
-                expression.term,
+                originalExpression.operator,
+                originalExpression.conceptId,
+                originalExpression.wildcard,
+                originalExpression.term,
                 this.createShortFormConcept(originalExpression)
         );
     }
