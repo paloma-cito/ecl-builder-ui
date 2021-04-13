@@ -61,9 +61,19 @@ export class EclService {
                 this.createShortFormConcept(expression.subexpressionConstraint)),
             new EClRefinement(new SubRefinement(new EClAttributeSet(
                     new SubAttributeSet(new Attribute(
-                        new ECLExpression(),
+                        new ECLExpression(
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.wildcard,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.term,
+                            this.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)),
                         '=',
-                        new ECLExpression(),
+                        new ECLExpression(
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.conceptId,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.wildcard,
+                            expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.term,
+                            this.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)),
                         false,
                         1
                     )), 
