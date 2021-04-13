@@ -156,7 +156,8 @@ export class HttpService {
         let expression: any = this.cloneObject(eclObject);
         if (!expression.operator) {
             expression.operator = 'self';
-        } else if (expression.conjunctionExpressionConstraints) {
+        }
+        if (expression.conjunctionExpressionConstraints) {
             expression.conjunctionExpressionConstraints.forEach(item => {
                 if (!item.operator) {
                     item.operator = 'self';
@@ -213,7 +214,8 @@ export class HttpService {
     removeSelfOperator(eclObject): any {
         if (eclObject.operator === 'self') {
             delete eclObject.operator;
-        } else if (eclObject.conjunctionExpressionConstraints) {
+        }
+        if (eclObject.conjunctionExpressionConstraints) {
             eclObject.conjunctionExpressionConstraints.forEach(item => {
                 if (item.operator === 'self') {
                     delete item.operator;

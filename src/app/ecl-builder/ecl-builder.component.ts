@@ -64,7 +64,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                     }
                     else if(typeId === 'disjunction'){
                         return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.attribute.attributeName.conceptId);
-                    } 
+                    }
                 }
             })
         );
