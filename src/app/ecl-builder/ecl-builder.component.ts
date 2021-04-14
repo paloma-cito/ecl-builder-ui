@@ -206,7 +206,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     removeAttributeGroupRow(type?, index?): void {
-        if(!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && ! this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet){
+        if(!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && !this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet){
             const expression = this.eclService.convertRefinementToExpression(this.eclObject);
             this.eclService.setEclObject(expression);
             this.updateExpression();
