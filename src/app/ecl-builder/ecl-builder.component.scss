@@ -145,7 +145,7 @@ div.modal {
 
                         div.expression-row {
                             position: relative;
-                            padding: 0 10px 10px 10px;
+                            padding: 0 15px 15px 10px;
                             margin: 10px;
 
                             select {
@@ -156,14 +156,14 @@ div.modal {
                                 margin-right: 8px;
                                 transform: translateY(1px);
                                 line-height: 26px;
-                                font-size: 16px;
+                                font-size: 15px;
                                 font-weight: 400;
                             }
 
                             p {
                                 display: inline-block;
                                 line-height: 30px;
-                                font-size: 16px;
+                                font-size: 15px;
                                 font-weight: 300;
                                 margin: 0 4px 0 0;
                                 padding: 0 12px 0 12px;
@@ -173,10 +173,10 @@ div.modal {
                                 margin-right: 8px;
                                 padding: 0 4px 0 4px;
                                 height: 30px;
-                                font-size: 14px;
+                                font-size: 15px;
                                 border-radius: 4px;
                                 border: 1px solid #C8CFD6;
-                                width: 400px;
+                                width: 20vw;
                                 font-weight: 400;
                             }
                         }
@@ -186,7 +186,7 @@ div.modal {
                 div.output-section {
                     p.output {
                         font-family: 'Courier New', serif;
-                        font-size: 14px;
+                        font-size: 16px;
                         letter-spacing: normal;
                         margin: 20px;
                         padding: 10px;
@@ -216,7 +216,7 @@ div.modal {
                     margin: 5px;
                     cursor: pointer;
                     font-weight: 300;
-                    font-size: 16px;
+                    font-size: 15px;
 
                     &.cancel {
                         color: #808080;
