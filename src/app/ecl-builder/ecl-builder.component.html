@@ -104,9 +104,9 @@
                     </ng-container>
                 </div>
 
-                <div class="expression-section">
+                <div *ngIf="eclObject?.fullTerm || eclObject?.eclRefinement" class="expression-section">
                     <h3>Refinements</h3>
-                    <button class="green" *ngIf="eclObject?.fullTerm" (click)="newAttributeGroup()">ADD REFINEMENT</button>
+                    <button class="green" *ngIf="!eclObject?.eclRefinement" (click)="newAttributeGroup()">ADD REFINEMENT</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="expression-group blue">
                             <div class="expression-row">
