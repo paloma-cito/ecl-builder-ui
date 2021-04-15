@@ -42,7 +42,6 @@ export class HttpService {
     }
     
     getMrcmTarget(url, branch, term, conceptId): Observable<any> {
-    console.log(conceptId);
         return this.http.get(url + '/mrcm/' + branch + '/attribute-values/' + conceptId + '?expand=fsn()&limit=50&termPrefix=' + term)
             .pipe(map(response => {
                 const typeaheads = [];

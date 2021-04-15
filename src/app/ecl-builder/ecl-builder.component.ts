@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ECLExpression, SubAttributeSet, Attribute} from '../models/ecl';
-import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
-import {Observable, Subscription} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
+import {Observable, of, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
 import {EclService} from '../services/ecl.service';
 
@@ -22,33 +22,61 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     @Input() eclString: string;
     eclStringSubscription: Subscription;
 
-    search = (text$: Observable<string>) => text$.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(term => {
-            if (term.length < 3) {
-                return [];
-            } else {
-                return this.httpService.getTypeahead(this.apiUrl, this.branch, term);
-            }
-        })
-    )
-    
-    searchMrcmType(parentId): (text$: Observable<string>) => Observable<any[]> {
+    search(eclObject): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            switchMap(term => {
-                if (term.length < 3) {
-                    return [];
-                } else {
-                    return this.httpService.getMrcmType(this.apiUrl, this.branch, term, parentId);
-                }
-            })
+            filter((text) => text.length > 2),
+            switchMap((text) => {
+                eclObject.searching = true;
+                return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
+                    tap(() => delete eclObject.searching));
+            }),
+            catchError(tap(() => delete eclObject.searching))
         );
     }
-    
-    searchMrcmTarget(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
+
+    searchMrcmType(conceptId, eclObject): (text$: Observable<string>) => Observable<any[]> {
+        return (text$: Observable<string>) => text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            filter((text) => text.length > 2),
+            switchMap((text) => {
+                eclObject.searching = true;
+                return this.httpService.getMrcmType(this.apiUrl, this.branch, text, conceptId).pipe(
+                    tap(() => delete eclObject.searching));
+            }),
+            catchError(tap(() => delete eclObject.searching))
+        );
+    }
+
+    searchMrcmTarget(conceptId, eclObject, type?): (text$: Observable<string>) => Observable<any[]> {
+        return (text$: Observable<string>) => text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            filter((text) => text.length > 2),
+            switchMap(term => {
+                if (!type) {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+                else if (type === 'conjunction') {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+                else if (type === 'disjunction') {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+            }),
+            catchError(tap(() => delete eclObject.searching))
+        );
+    }
+
+    searchMrcmTarget_old(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
@@ -175,53 +203,54 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     newAttributeGroupRow(): void {
-        if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && ! this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+        if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet &&
+            !this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
             const conjunction = this.eclService.convertRefinementToConjunction(this.eclObject);
             this.eclService.setEclObject(conjunction);
             this.updateExpression();
-        }
-
-        else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet && this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+        } else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet &&
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
             this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.push(new SubAttributeSet(new Attribute(
-                    new ECLExpression(),
-                    '=',
-                    new ECLExpression(),
-                    false,
-                    1
-                )));
+                new ECLExpression(),
+                '=',
+                new ECLExpression(),
+                false,
+                1
+            )));
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
-        } else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+        } else if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet &&
+            this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
             this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.push(new SubAttributeSet(new Attribute(
-                    new ECLExpression(),
-                    '=',
-                    new ECLExpression(),
-                    false,
-                    1
-                )));
+                new ECLExpression(),
+                '=',
+                new ECLExpression(),
+                false,
+                1
+            )));
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         }
-        
     }
 
     removeAttributeGroupRow(type?, index?): void {
-        if(!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet && !this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet){
+        if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet &&
+            !this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
             const expression = this.eclService.convertRefinementToExpression(this.eclObject);
             this.eclService.setEclObject(expression);
             this.updateExpression();
         }
-        if(type === 'conjunction'){
+        if (type === 'conjunction') {
             this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.splice(index, 1);
-            if(this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.length === 0){
+            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.length === 0) {
                 delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet;
             }
             this.eclService.setEclObject(this.eclObject);
             this.updateExpression();
         }
-        if(type === 'disjunction'){
+        if (type === 'disjunction') {
             this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.splice(index, 1);
-            if(this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.length === 0){
+            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.length === 0) {
                 delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet;
             }
             this.eclService.setEclObject(this.eclObject);
