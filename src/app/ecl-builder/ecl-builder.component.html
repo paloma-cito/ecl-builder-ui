@@ -56,10 +56,12 @@
 <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search(conj)" placement="bottom"/>
-                                <ng-container *ngIf="conj?.searching">
-                                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                </ng-container>
+                                <span class="ellipsis">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search(conj)" placement="bottom"/>
+                                    <ng-container *ngIf="conj?.searching">
+                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                    </ng-container>
+                                </span>
                                 <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span></button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
@@ -84,10 +86,12 @@
 <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search(disj)" placement="bottom"/>
-                                <ng-container *ngIf="disj?.searching">
-                                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                </ng-container>
+                                <span class="ellipsis">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search(disj)" placement="bottom"/>
+                                    <ng-container *ngIf="disj?.searching">
+                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                    </ng-container>
+                                </span>
                                 <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span></button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
@@ -108,10 +112,12 @@
 <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search(eclObject)" placement="bottom"/>
-                                <ng-container *ngIf="eclObject?.searching">
-                                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                </ng-container>
+                                <span class="ellipsis">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search(eclObject)" placement="bottom"/>
+                                    <ng-container *ngIf="eclObject?.searching">
+                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                    </ng-container>
+                                </span>
                             </div>
                         </div>
                     </ng-container>
