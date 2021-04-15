@@ -29,28 +29,54 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             filter((text) => text.length > 2),
             switchMap((text) => {
                 eclObject.searching = true;
-                return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(tap(() => delete eclObject.searching));
+                return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
+                    tap(() => delete eclObject.searching));
             }),
-            catchError((error) => of(error))
+            catchError(tap(() => delete eclObject.searching))
         );
     }
 
-
-    searchMrcmType(parentId): (text$: Observable<string>) => Observable<any[]> {
+    searchMrcmType(conceptId, eclObject): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            switchMap(term => {
-                if (term.length < 3) {
-                    return [];
-                } else {
-                    return this.httpService.getMrcmType(this.apiUrl, this.branch, term, parentId);
-                }
-            })
+            filter((text) => text.length > 2),
+            switchMap((text) => {
+                eclObject.searching = true;
+                return this.httpService.getMrcmType(this.apiUrl, this.branch, text, conceptId).pipe(
+                    tap(() => delete eclObject.searching));
+            }),
+            catchError(tap(() => delete eclObject.searching))
         );
     }
 
-    searchMrcmTarget(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
+    searchMrcmTarget(conceptId, eclObject, type?): (text$: Observable<string>) => Observable<any[]> {
+        return (text$: Observable<string>) => text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            filter((text) => text.length > 2),
+            switchMap(term => {
+                if (!type) {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+                else if (type === 'conjunction') {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+                else if (type === 'disjunction') {
+                    eclObject.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+            }),
+            catchError(tap(() => delete eclObject.searching))
+        );
+    }
+
+    searchMrcmTarget_old(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
