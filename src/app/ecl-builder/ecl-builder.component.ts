@@ -50,51 +50,29 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         );
     }
 
-    searchMrcmTarget(conceptId, eclObject, type?): (text$: Observable<string>) => Observable<any[]> {
+    searchMrcmTarget(attributeName, value, type?): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
             debounceTime(300),
             distinctUntilChanged(),
             filter((text) => text.length > 2),
             switchMap(term => {
                 if (!type) {
-                    eclObject.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
-                        tap(() => delete eclObject.searching));
+                    value.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
+                        tap(() => delete value.searching));
                 }
                 else if (type === 'conjunction') {
-                    eclObject.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
-                        tap(() => delete eclObject.searching));
+                    value.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
+                        tap(() => delete value.searching));
                 }
                 else if (type === 'disjunction') {
-                    eclObject.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, conceptId).pipe(
-                        tap(() => delete eclObject.searching));
+                    value.searching = true;
+                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
+                        tap(() => delete value.searching));
                 }
             }),
-            catchError(tap(() => delete eclObject.searching))
-        );
-    }
-
-    searchMrcmTarget_old(eclObject, typeId?): (text$: Observable<string>) => Observable<any[]> {
-        return (text$: Observable<string>) => text$.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap(term => {
-                if (term.length < 3) {
-                    return [];
-                } else {
-                    if(!typeId){
-                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId);
-                    }
-                    else if(typeId === 'conjunction'){
-                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.attribute.attributeName.conceptId);
-                    }
-                    else if(typeId === 'disjunction'){
-                        return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.attribute.attributeName.conceptId);
-                    }
-                }
-            })
+            catchError(tap(() => delete value.searching))
         );
     }
 
