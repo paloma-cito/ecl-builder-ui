@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression, ECLExpressionWithRefinement} from '../models/ecl';
 import {EclService} from './ecl.service';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,10 @@ import {EclService} from './ecl.service';
 export class HttpService {
 
     constructor(private http: HttpClient, private eclService: EclService) {
+    }
+    
+    errorHandler(error: HttpErrorResponse) {
+        return Observable.throw(error.message || "server error.");
     }
 
     getTypeahead(url, branch, term): Observable<any> {
@@ -51,7 +56,8 @@ export class HttpService {
                 });
 
                 return typeaheads;
-            }));
+            }),
+            catchError(err => { return this.errorHandler(err) }));
     }
 
     getStringToModel(url, eclString): Observable<any> {
