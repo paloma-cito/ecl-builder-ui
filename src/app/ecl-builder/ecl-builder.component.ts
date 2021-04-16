@@ -287,39 +287,16 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.eclService.setEclString('');
     }
 
-    ECLexpressionBuilder(expression: string): any {
-        if (this.eclString) {
-            const response = expression.match(/(?:[^:,](?!or)(?!\(<<))+(?:[:,\s]| or)*/g);
-
-            let whitespaceCount = 0;
-
-            for (let i = 0; i < response.length; i++) {
-                if (i !== 0) {
-                    if (response[i - 1].includes(':')) {
-                        whitespaceCount++;
-                    }
-
-                    if (response[i].startsWith('<<') && !response[i - 1].includes(':')) {
-                        whitespaceCount++;
-                    }
-
-                    if (!response[i - 1].includes('or') && response[i].startsWith('or') || !response[i - 1].includes('OR') && response[i].startsWith('OR')) {
-                        whitespaceCount++;
-                    }
-
-                    if (response[i - 1].includes('or') && response[i - 1].trim().endsWith(',') || response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
-                        whitespaceCount--;
-                    }
-
-                    if (response[i].startsWith('r') || response[i].startsWith('R')) {
-                        whitespaceCount++;
-                    }
-                }
-
-                response[i] = '    '.repeat(whitespaceCount) + response[i].trim();
-            }
-
-            return response;
+    getOpSymbol(operator): string {
+        switch (operator) {
+            case 'self': return '';
+            case 'descendantof': return '<';
+            case 'descendantorselfof': return '<<';
+            case 'childof': return '<!';
+            case 'ancestorof': return '>';
+            case 'ancestororselfof': return '>>';
+            case 'parentof': return '>!';
+            case 'memberOf': return '^';
         }
     }
 

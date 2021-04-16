@@ -186,18 +186,13 @@ div.modal {
                                 border: 1px solid #C8CFD6;
                                 width: 20vw;
                                 font-weight: 400;
-
-                                &.test {
-                                    background-color: #A060AE !important;
-                                    border-color: #EB4C59 !important;
-                                }
                             }
                         }
                     }
                 }
 
                 div.output-section {
-                    p.output {
+                    p.output, div.output {
                         font-family: 'Courier New', serif;
                         font-size: 16px;
                         letter-spacing: normal;
@@ -206,6 +201,30 @@ div.modal {
                         border: 1px solid #C8CFD6;
                         background-color: lighten(#E0E0E0, 10%);
                         border-radius: 8px;
+
+                        p {
+                            margin-bottom: 0;
+
+                            &.indent-1 {
+                                padding-left: 36px;
+                            }
+
+                            &.indent-2 {
+                                padding-left: 72px;
+                            }
+
+                            &.indent-3 {
+                                padding-left: 108px;
+                            }
+
+                            &.indent-4 {
+                                padding-left: 144px;
+                            }
+
+                            &.indent-5 {
+                                padding-left: 180px;
+                            }
+                        }
                     }
                 }
             }

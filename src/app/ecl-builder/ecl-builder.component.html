@@ -285,11 +285,56 @@
                 <div class="output-section">
                     <h3>Output</h3>
 <!--                    <p class="output">{{eclObject | json}}</p>-->
-<!--                    <p class="output">{{eclString}}</p>-->
-                    <p *ngIf="eclString" class="output">
-                        <span class="mb-0" style="display:block; white-space:pre" *ngFor="let line of ECLexpressionBuilder(eclString)">{{line}}</span>
-                    </p>
 
+                    <div *ngIf="eclString" class="output">
+                        <ng-container *ngIf="eclObject?.fullTerm">
+                            <p>{{getOpSymbol(eclObject.operator)}} {{eclObject.fullTerm}}<p>
+                        </ng-container>
+
+                        <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
+                            <span *ngFor="let conjunction of eclObject.conjunctionExpressionConstraints; let first = first">
+                                {{first ? '' : 'AND'}} {{getOpSymbol(conjunction.operator)}} {{conjunction.fullTerm}}</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
+                            <span *ngFor="let disjunction of eclObject.disjunctionExpressionConstraints; let first = first">
+                                {{first ? '' : 'OR'}} {{getOpSymbol(disjunction.operator)}} {{disjunction.fullTerm}}</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="eclObject?.subexpressionConstraint">
+                            <p>{{getOpSymbol(eclObject.subexpressionConstraint.operator)}} {{eclObject.subexpressionConstraint.fullTerm}} :<p>
+
+                            <p *ngIf="eclObject?.eclRefinement" class="indent-1">
+                                {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)}}
+                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm}}
+                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator}}
+                                {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)}}
+                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm}}
+                            </p>
+
+                            <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
+                                <p *ngFor="let conj of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let last = last" class="indent-1">
+                                    AND
+                                    {{getOpSymbol(conj.attribute.attributeName.operator)}}
+                                    {{conj.attribute.attributeName.fullTerm}}
+                                    {{conj.attribute.expressionComparisonOperator}}
+                                    {{getOpSymbol(conj.attribute.value.operator)}}
+                                    {{conj.attribute.value.fullTerm}}
+                                </p>
+                            </ng-container>
+
+                            <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
+                                <p *ngFor="let disj of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet; let last = last" class="indent-1">
+                                    OR
+                                    {{getOpSymbol(disj.attribute.attributeName.operator)}}
+                                    {{disj.attribute.attributeName.fullTerm}}
+                                    {{disj.attribute.expressionComparisonOperator}}
+                                    {{getOpSymbol(disj.attribute.value.operator)}}
+                                    {{disj.attribute.value.fullTerm}}
+                                </p>
+                            </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
 
