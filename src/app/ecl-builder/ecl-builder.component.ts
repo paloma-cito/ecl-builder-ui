@@ -289,7 +289,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     ECLexpressionBuilder(expression: string): any {
         if (this.eclString) {
-            const response = expression.match(/(?:[^:,](?!or)(?!\(<<))+(?:[:,\s]| or)*/g);
+            const response = expression.match(/(?:[^:,](?!OR)(?!\(<<))+(?:[:,\s]| OR)*/g);
 
             let whitespaceCount = 0;
 
@@ -303,15 +303,15 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                         whitespaceCount++;
                     }
 
-                    if (!response[i - 1].includes('or') && response[i].startsWith('or') || !response[i - 1].includes('OR') && response[i].startsWith('OR')) {
+                    if (!response[i - 1].includes('OR') && response[i].startsWith('OR')) {
                         whitespaceCount++;
                     }
 
-                    if (response[i - 1].includes('or') && response[i - 1].trim().endsWith(',') || response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
+                    if (response[i - 1].includes('OR') && response[i - 1].trim().endsWith(',')) {
                         whitespaceCount--;
                     }
 
-                    if (response[i].startsWith('r') || response[i].startsWith('R')) {
+                    if (response[i].startsWith('R')) {
                         whitespaceCount++;
                     }
                 }
