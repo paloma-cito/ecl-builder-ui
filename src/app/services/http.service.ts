@@ -35,9 +35,18 @@ export class HttpService {
         return this.http.get(url + '/mrcm/' + branch + '/domain-attributes?expand=pt(),fsn()&limit=50&parentIds=' + conceptId)
             .pipe(map(response => {
                 const typeaheads = [];
-
+                const terms = term.split(" ");
+                let found = false;
                 response['items'].forEach((item) => {
-                    if(item.fsn.term.toLowerCase().includes(term)){
+                    terms.forEach((subTerm) => {
+                        if(item.fsn.term.toLowerCase().includes(subTerm.toLowerCase())){
+                            found = true;
+                        }
+                        else{
+                            found = false;
+                        }
+                    });
+                    if(found){
                         typeaheads.push(item.id + ' |' + item.fsn.term + '|');
                     }
                 });
