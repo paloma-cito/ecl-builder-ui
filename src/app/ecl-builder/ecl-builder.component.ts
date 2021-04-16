@@ -43,8 +43,14 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             filter((text) => text.length > 2),
             switchMap((text) => {
                 eclObject.searching = true;
-                return this.httpService.getMrcmType(this.apiUrl, this.branch, text, conceptId).pipe(
-                    tap(() => delete eclObject.searching));
+                if(!conceptId){
+                    return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
+                        tap(() => delete eclObject.searching));
+                }
+                else{
+                    return this.httpService.getMrcmType(this.apiUrl, this.branch, text, conceptId).pipe(
+                        tap(() => delete eclObject.searching));
+                }
             }),
             catchError(tap(() => delete eclObject.searching))
         );
@@ -56,7 +62,12 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             filter((text) => text.length > 2),
             switchMap(term => {
-                if (!type) {
+                if (!attributeName.conceptId) {
+                    value.searching = true;
+                    return this.httpService.getTypeahead(this.apiUrl, this.branch, term).pipe(
+                        tap(() => delete value.searching));
+                }
+                else if (!type) {
                     value.searching = true;
                     return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
                         tap(() => delete value.searching));
@@ -286,7 +297,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
         this.eclService.setEclString('');
     }
-
+    
     getOpSymbol(operator): string {
         switch (operator) {
             case 'self': return '';
