@@ -174,13 +174,20 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     removeFocusConceptRow(index): void {
         if (this.eclObject.conjunctionExpressionConstraints) {
             this.eclObject.conjunctionExpressionConstraints.splice(index, 1);
-            this.eclService.setEclObject(this.eclObject);
-            this.updateExpression();
+            if (this.eclObject.conjunctionExpressionConstraints.length === 1) {
+                this.eclService.setEclObject(this.eclObject.conjunctionExpressionConstraints[0]);
+            } else {
+                this.eclService.setEclObject(this.eclObject);
+            }
         } else if (this.eclObject.disjunctionExpressionConstraints) {
             this.eclObject.disjunctionExpressionConstraints.splice(index, 1);
-            this.eclService.setEclObject(this.eclObject);
-            this.updateExpression();
+            if (this.eclObject.disjunctionExpressionConstraints.length === 1) {
+                this.eclService.setEclObject(this.eclObject.disjunctionExpressionConstraints[0]);
+            } else {
+                this.eclService.setEclObject(this.eclObject);
+            }
         }
+        this.updateExpression();
     }
 
     newAttributeGroup(): void {
@@ -297,7 +304,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
         this.eclService.setEclString('');
     }
-    
+
     getOpSymbol(operator): string {
         switch (operator) {
             case 'self': return '';
