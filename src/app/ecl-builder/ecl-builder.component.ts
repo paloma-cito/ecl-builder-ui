@@ -128,7 +128,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 delete eclObject.term;
             } else {
                 eclObject.wildcard = false;
-                eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
+                eclObject.conceptId = eclObject.fullTerm.slice(0, eclObject.fullTerm.indexOf('|'));
                 eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
             }
         }
