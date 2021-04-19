@@ -126,7 +126,6 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 eclObject.wildcard = true;
                 delete eclObject.conceptId;
                 delete eclObject.term;
-                delete eclObject.operator;
             } else {
                 eclObject.wildcard = false;
                 eclObject.conceptId = eclObject.fullTerm.replace(/\D/g, '');
