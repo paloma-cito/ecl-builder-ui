@@ -8,10 +8,10 @@
                 </button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body"><button class="purple" (click)="clear()">CLEAR</button>
                 <div *ngIf="eclObject" class="expression-section">
                     <h3>Focus Concept</h3>
-                    <button class="purple" (click)="clear()">CLEAR</button>
+                    
                     <ng-container *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && !eclObject?.subexpressionConstraint">
                         <div class="expression-group grey">
                             <div class="expression-row">
