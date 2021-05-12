@@ -43,7 +43,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             filter((text) => text.length > 2),
             switchMap((text) => {
                 eclObject.searching = true;
-                if(!conceptId){
+                if (!conceptId){
                     return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
                         tap(() => delete eclObject.searching));
                 }
@@ -120,6 +120,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.element.remove();
     }
 
+    isMemberOf(operator): boolean {
+        return operator === 'memberOf';
+    }
+
     getConceptId(eclObject): void {
         if (eclObject) {
             if (eclObject.fullTerm === '*') {
@@ -128,7 +132,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 delete eclObject.term;
             } else {
                 eclObject.wildcard = false;
-                eclObject.conceptId = eclObject.fullTerm.slice(0, (eclObject.fullTerm.indexOf('|') -1));
+                eclObject.conceptId = eclObject.fullTerm.slice(0, (eclObject.fullTerm.indexOf('|') - 1));
                 eclObject.term = eclObject.fullTerm.slice(eclObject.fullTerm.indexOf('|') + 1, eclObject.fullTerm.lastIndexOf('|'));
             }
         }
