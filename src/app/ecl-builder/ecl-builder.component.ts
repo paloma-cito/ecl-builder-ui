@@ -137,13 +137,13 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.updateExpression();
+        // this.updateExpression();
     }
 
     updateExpression(): void {
         const eclObject = this.cloneObject(this.eclObject);
 
-        this.httpService.getModelToString(this.apiUrl, eclObject).subscribe((dataString: string) => {
+        this.httpService.getModelToString(this.apiUrl, eclObject).pipe(debounceTime(500)).subscribe((dataString: string) => {
             // console.log('API eclString returned: ', dataString);
             this.eclService.setEclString(dataString);
         });
