@@ -150,12 +150,15 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     close(): void {
-        document.querySelector('ecl-builder').remove();
+        document.getElementById('ecl-builder').remove();
     }
 
     accept(): void {
-        this.output.emit(this.eclString);
-        document.querySelector('ecl-builder').remove();
+        this.httpService.getModelToString(this.apiUrl, this.eclObject).subscribe((dataString: string) => {
+            this.output.emit(dataString);
+            document.getElementById('ecl-builder').remove();
+        });
+        document.getElementById('ecl-builder').hidden = true;
     }
 
     newFocusConceptRow(): void {
