@@ -6,7 +6,7 @@ export class ECLExpression {
     fullTerm: string;
 
     constructor(operator?, conceptId?, wildcard?, term?, fullTerm?) {
-        this.operator = (operator ? operator : 'self');
+        this.operator = (operator ? operator : 'descendantorselfof');
         this.conceptId = conceptId;
         this.wildcard = wildcard;
         this.term = term;

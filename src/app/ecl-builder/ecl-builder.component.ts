@@ -307,7 +307,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     clear(): void {
-        this.eclService.setEclObject(new ECLExpression('self', '', false, '', ''));
+        this.eclService.setEclObject(new ECLExpression('descendantorselfof', '', false, '', ''));
         this.eclService.setEclString('');
     }
 

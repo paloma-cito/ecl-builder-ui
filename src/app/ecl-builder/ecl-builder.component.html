@@ -17,9 +17,9 @@
                         <div class="expression-group grey">
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -47,9 +47,9 @@
                                     <option value="OR">OR</option>
                                 </select>
                                 <select [(ngModel)]="conj.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -78,9 +78,9 @@
                                     <option value="OR" selected>OR</option>
                                 </select>
                                 <select [(ngModel)]="disj.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -106,9 +106,9 @@
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.subexpressionConstraint.operator"
                                         (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -138,9 +138,9 @@
                         <div class="expression-group blue">
                             <div class="expression-row">
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -169,9 +169,9 @@
                                     <option [value]="'!='">!=</option>
                                 </select>
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'" selected>Self</option>
+                                    <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                     <option [value]="'childof'">&lt;! Child of</option>
                                     <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                     <option [value]="'ancestorof'">> Ancestor of</option>
@@ -208,9 +208,9 @@
                                         <option value="OR">OR</option>
                                     </select>
                                     <select [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
-                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'self'">Self</option>
                                         <option [value]="'descendantof'">< Descendant of</option>
-                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                         <option [value]="'childof'">&lt;! Child of</option>
                                         <!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                         <option [value]="'ancestorof'">> Ancestor of</option>
@@ -240,9 +240,9 @@
                                         <option [value]="'!='">!=</option>
                                     </select>
                                     <select [(ngModel)]="conjunctionAttributeSet.attribute.value.operator" (ngModelChange)="updateExpression()">
-                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'self'">Self</option>
                                         <option [value]="'descendantof'">< Descendant of</option>
-                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                         <option [value]="'childof'">&lt;! Child of</option>
                                         <!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                         <option [value]="'ancestorof'">> Ancestor of</option>
@@ -279,9 +279,9 @@
                                         <option value="OR" selected>OR</option>
                                     </select>
                                     <select [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
-                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'self'">Self</option>
                                         <option [value]="'descendantof'">< Descendant of</option>
-                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                         <option [value]="'childof'">&lt;! Child of</option>
                                         <!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                         <option [value]="'ancestorof'">> Ancestor of</option>
@@ -310,9 +310,9 @@
                                         <option [value]="'!='">!=</option>
                                     </select>
                                     <select [(ngModel)]="disjunctionAttributeSet.attribute.value.operator" (ngModelChange)="updateExpression()">
-                                        <option [value]="'self'" selected>Self</option>
+                                        <option [value]="'self'">Self</option>
                                         <option [value]="'descendantof'">< Descendant of</option>
-                                        <option [value]="'descendantorselfof'"><< Descendants or Self of</option>
+                                        <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
                                         <option [value]="'childof'">&lt;! Child of</option>
                                         <!--                                        <option [value]="'childorselfof'"><<! Child or Self of</option>-->
                                         <option [value]="'ancestorof'">> Ancestor of</option>
