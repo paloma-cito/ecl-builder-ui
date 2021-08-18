@@ -1,10 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {ECLConjunctionExpression, ECLDisjunctionExpression, ECLExpression, ECLExpressionWithRefinement} from '../models/ecl';
+import {
+    ECLConjunctionExpression,
+    ECLDisjunctionExpression,
+    ECLExpression,
+    ECLExpressionWithRefinement
+} from '../models/ecl';
 import {EclService} from './ecl.service';
-import { catchError } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -12,10 +16,6 @@ import { catchError } from 'rxjs/operators';
 export class HttpService {
 
     constructor(private http: HttpClient, private eclService: EclService) {
-    }
-    
-    errorHandler(error: HttpErrorResponse) {
-        return Observable.throw(error.message || "server error.");
     }
 
     getTypeahead(url, branch, term): Observable<any> {
@@ -30,23 +30,22 @@ export class HttpService {
                 return typeaheads;
             }));
     }
-    
+
     getMrcmType(url, branch, term, conceptId): Observable<any> {
         return this.http.get(url + '/mrcm/' + branch + '/domain-attributes?expand=pt(),fsn()&limit=50&parentIds=' + conceptId)
             .pipe(map(response => {
                 const typeaheads = [];
-                const terms = term.split(" ");
+                const terms = term.split(' ');
                 let found = false;
                 response['items'].forEach((item) => {
                     terms.forEach((subTerm) => {
-                        if(item.fsn.term.toLowerCase().includes(subTerm.toLowerCase())){
+                        if (item.fsn.term.toLowerCase().includes(subTerm.toLowerCase())) {
                             found = true;
-                        }
-                        else{
+                        } else {
                             found = false;
                         }
                     });
-                    if(found){
+                    if (found) {
                         typeaheads.push(item.id + ' |' + item.fsn.term + '|');
                     }
                 });
@@ -54,7 +53,7 @@ export class HttpService {
                 return typeaheads;
             }));
     }
-    
+
     getMrcmTarget(url, branch, term, conceptId): Observable<any> {
         return this.http.get(url + '/mrcm/' + branch + '/attribute-values/' + conceptId + '?expand=fsn()&limit=50&termPrefix=' + term)
             .pipe(map(response => {
@@ -65,33 +64,32 @@ export class HttpService {
                 });
 
                 return typeaheads;
-            }),
-            catchError(err => { return this.errorHandler(err) }));
+            }));
     }
 
     getStringToModel(url, eclString): Observable<any> {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
 
             if (response['conjunctionExpressionConstraints']) {
-                let expression: ECLConjunctionExpression = this.cloneObject(response);
+                const expression: ECLConjunctionExpression = this.cloneObject(response);
 
                 expression.conjunctionExpressionConstraints.forEach(item => {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
-                
+
 
                 return this.addSelfOperator(expression);
             } else if (response['disjunctionExpressionConstraints']) {
-                let expression: ECLDisjunctionExpression = this.cloneObject(response);
+                const expression: ECLDisjunctionExpression = this.cloneObject(response);
 
                 expression.disjunctionExpressionConstraints.forEach(item => {
                     item.fullTerm = this.eclService.createShortFormConcept(item);
                 });
 
-                
+
                 return this.addSelfOperator(expression);
             } else if (response['subexpressionConstraint']) {
-                let expression: ECLExpressionWithRefinement = this.cloneObject(response);
+                const expression: ECLExpressionWithRefinement = this.cloneObject(response);
                 expression.subexpressionConstraint.fullTerm = this.eclService.createShortFormConcept(expression.subexpressionConstraint);
                 expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName);
                 expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm = this.eclService.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value);
@@ -109,11 +107,11 @@ export class HttpService {
                         item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
                     });
                 }
-                
-                
+
+
                 return this.addSelfOperator(expression);
             } else {
-                let expression: ECLExpression = this.cloneObject(response);
+                const expression: ECLExpression = this.cloneObject(response);
                 expression.fullTerm = this.eclService.createShortFormConcept(expression);
                 return this.addSelfOperator(expression);
             }
@@ -165,9 +163,9 @@ export class HttpService {
 
         return eclObject;
     }
-    
+
     addSelfOperator(eclObject): any {
-        let expression: any = this.cloneObject(eclObject);
+        const expression: any = this.cloneObject(eclObject);
         if (!expression.operator) {
             expression.operator = 'self';
         }

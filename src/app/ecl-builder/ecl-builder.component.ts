@@ -17,6 +17,8 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     @Input() branch: string;
     @Output() output = new EventEmitter();
 
+    refinementActive = false;
+
     eclObject: any;
     eclObjectSubscription: Subscription;
     @Input() eclString: string;
@@ -141,6 +143,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     updateExpression(): void {
+        if (!this.refinementActive) {
+            this.refinementActive = true;
+        }
+
         const eclObject = this.cloneObject(this.eclObject);
 
         this.httpService.getModelToString(this.apiUrl, eclObject).pipe(debounceTime(500)).subscribe((dataString: string) => {

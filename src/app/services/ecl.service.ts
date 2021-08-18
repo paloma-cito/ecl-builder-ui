@@ -50,7 +50,7 @@ export class EclService {
     convertExpressionToConjunction(expression): ECLConjunctionExpression {
         return new ECLConjunctionExpression([expression]);
     }
-    
+
     convertRefinementToConjunction(expression): ECLExpressionWithRefinement {
         return new ECLExpressionWithRefinement(
             new ECLExpression(
@@ -76,7 +76,7 @@ export class EclService {
                             this.createShortFormConcept(expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)),
                         false,
                         1
-                    )), 
+                    )),
                     [new SubAttributeSet(new Attribute(
                         new ECLExpression(),
                         '=',

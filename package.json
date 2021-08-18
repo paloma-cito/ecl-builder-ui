@@ -7,7 +7,6 @@
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",
-        "e2e": "ng e2e",
         "build:component": "ng build --prod --output-hashing none && node concatenate.js"
     },
     "private": true,
