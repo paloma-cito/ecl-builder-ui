@@ -18,6 +18,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     @Output() output = new EventEmitter();
 
     refinementActive = false;
+    attributes: any[];
 
     eclObject: any;
     eclObjectSubscription: Subscription;
@@ -103,19 +104,24 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             }
         });
 
-        // console.log('eclString IN: ', this.eclString);
-
         if (this.eclString) {
             this.eclService.setEclString(this.eclString);
 
             this.httpService.getStringToModel(this.apiUrl, this.eclString).subscribe((dataObject: any) => {
-                // console.log('API eclModel returned: ', dataObject);
                 this.eclService.setEclObject(dataObject);
                 this.updateExpression();
             });
         } else {
             this.clear();
         }
+
+        this.httpService.getAttributes(this.apiUrl, this.branch).subscribe(data => {
+            this.attributes = data.items;
+        });
+    }
+
+    isConcreteDomain(id): boolean {
+        return this.attributes.find(attribute => String(this.getIdFromShortConcept(id)) === attribute.id);
     }
 
     ngOnDestroy(): void {
@@ -153,6 +159,22 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
             // console.log('API eclString returned: ', dataString);
             this.eclService.setEclString(dataString);
         });
+    }
+
+    setupConcrete(event): void {
+        if (this.isConcreteDomain(event)) {
+            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
+                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator;
+            }
+
+            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator) {
+                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator;
+            }
+
+            if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator) {
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator = '=';
+            }
+        }
     }
 
     close(): void {
@@ -315,6 +337,12 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     clear(): void {
         this.eclService.setEclObject(new ECLExpression('descendantorselfof', '', false, '', ''));
         this.eclService.setEclString('');
+    }
+
+    getIdFromShortConcept(input): string {
+        if (input) {
+            return input.replace(/\D/g, '');
+        }
     }
 
     getOpSymbol(operator): string {

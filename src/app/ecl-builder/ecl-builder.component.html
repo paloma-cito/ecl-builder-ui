@@ -152,49 +152,60 @@
                                 <span class="ellipsis">
                                     <input *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
                                            [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
-                                           (selectItem)="updateExpression()" (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"
+                                           (selectItem)="updateExpression(); setupConcrete($event.item)"
+                                           (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"
                                            [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" placement="bottom"/>
                                     <input *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
                                            [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
-                                           (selectItem)="updateExpression()"
+                                           (selectItem)="updateExpression(); setupConcrete($event.item)"
                                            (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"
                                            [ngbTypeahead]="search(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" placement="bottom"/>
                                     <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.searching">
                                         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                                     </ng-container>
                                 </span>
-                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator"
-                                        (ngModelChange)="updateExpression()">
-                                    <option [value]="'='">=</option>
-                                    <option [value]="'!='">!=</option>
-                                </select>
-                                <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator" (ngModelChange)="updateExpression()">
-                                    <option [value]="'self'">Self</option>
-                                    <option [value]="'descendantof'">< Descendant of</option>
-                                    <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
-                                    <option [value]="'childof'">&lt;! Child of</option>
-                                    <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
-                                    <option [value]="'ancestorof'">> Ancestor of</option>
-                                    <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
-                                    <option [value]="'parentof'">>! Parent of</option>
-                                    <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
-                                    <option [value]="'memberOf'">^ Member of</option>
-                                </select>
-                                <span class="ellipsis">
-                                    <input *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                           [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                           (selectItem)="updateExpression()"
-                                           (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
-                                           [ngbTypeahead]="searchMrcmTarget(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
-                                    <input *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                           [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                           (selectItem)="updateExpression()"
-                                           (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
-                                           [ngbTypeahead]="search(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
-                                    <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                <ng-container *ngIf="isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
+                                    <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator"
+                                            (ngModelChange)="updateExpression()">
+                                        <option [value]="'='">=</option>
+                                        <option [value]="'!='">!=</option>
+                                    </select>
+                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericValue" (ngModelChange)="updateExpression()">
+                                </ng-container>
+                                <ng-container *ngIf="!isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
+                                    <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator"
+                                            (ngModelChange)="updateExpression()">
+                                        <option [value]="'='">=</option>
+                                        <option [value]="'!='">!=</option>
+                                    </select>
+                                    <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator" (ngModelChange)="updateExpression()">
+                                        <option [value]="'self'">Self</option>
+                                        <option [value]="'descendantof'">< Descendant of</option>
+                                        <option [value]="'descendantorselfof'" selected><< Descendants or Self of</option>
+                                        <option [value]="'childof'">&lt;! Child of</option>
+                                        <!--                                    <option [value]="'childorselfof'"><<! Child or Self of</option>-->
+                                        <option [value]="'ancestorof'">> Ancestor of</option>
+                                        <option [value]="'ancestororselfof'">>> Ancestor or Self of</option>
+                                        <option [value]="'parentof'">>! Parent of</option>
+                                        <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
+                                        <option [value]="'memberOf'">^ Member of</option>
+                                    </select>
+                                    <span class="ellipsis">
+                                        <input *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
+                                               [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
+                                               (selectItem)="updateExpression()"
+                                               (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
+                                               [ngbTypeahead]="searchMrcmTarget(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
+                                        <input *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
+                                               [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
+                                               (selectItem)="updateExpression()"
+                                               (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
+                                               [ngbTypeahead]="search(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
+                                        <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.searching">
+                                            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                        </ng-container>
+                                    </span>
+                                </ng-container>
 
                                 <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span>
                                 </button>
@@ -369,15 +380,26 @@
                         <ng-container *ngIf="eclObject?.subexpressionConstraint">
                             <p>{{getOpSymbol(eclObject.subexpressionConstraint.operator)}} {{eclObject.subexpressionConstraint.fullTerm}}
                                 :
-                            <p>
-
-                            <p *ngIf="eclObject?.eclRefinement" class="indent-1">
-                                {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)}}
-                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm}}
-                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator}}
-                                {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)}}
-                                {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm}}
                             </p>
+
+                            <ng-container *ngIf="isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
+                                <p *ngIf="eclObject?.eclRefinement" class="indent-1">
+                                    {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)}}
+                                    {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm}}
+                                    {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator}}
+                                    #{{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericValue}}
+                                </p>
+                            </ng-container>
+                            <ng-container *ngIf="!isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
+                                <p *ngIf="eclObject?.eclRefinement" class="indent-1">
+                                    {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)}}
+                                    {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm}}
+                                    {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator}}
+                                    {{getOpSymbol(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)}}
+                                    {{eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm}}
+                                </p>
+                            </ng-container>
+
 
                             <ng-container
                                     *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">

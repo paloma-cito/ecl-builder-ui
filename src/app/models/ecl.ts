@@ -82,12 +82,16 @@ export class Attribute {
     value: ECLExpression;
     reverse: boolean;
     cardinalityMin: number;
+    numericComparisonOperator: string;
+    numericValue: number;
 
-    constructor(attributeName, expressionComparisonOperator, value, reverse, cardinalityMin) {
+    constructor(attributeName, expressionComparisonOperator, value, reverse, cardinalityMin, numericComparisonOperator?, numericValue?) {
         this.attributeName = attributeName;
         this.expressionComparisonOperator = expressionComparisonOperator;
         this.value = value;
         this.reverse = reverse;
         this.cardinalityMin = cardinalityMin;
+        this.numericComparisonOperator = numericComparisonOperator;
+        this.numericValue = numericValue;
     }
 }

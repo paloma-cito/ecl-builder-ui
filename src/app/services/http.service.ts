@@ -67,6 +67,10 @@ export class HttpService {
             }));
     }
 
+    getAttributes(url, branch): Observable<any> {
+        return this.http.get<any>(url + '/' + branch + '/concepts?ecl=<<762706009');
+    }
+
     getStringToModel(url, eclString): Observable<any> {
         return this.http.post(url + '/util/ecl-string-to-model', eclString).pipe(map(response => {
 
