@@ -121,7 +121,9 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     isConcreteDomain(id): boolean {
-        return this.attributes.find(attribute => String(this.getIdFromShortConcept(id)) === attribute.id);
+        if (this.attributes) {
+            return this.attributes.find(attribute => String(this.getIdFromShortConcept(id)) === attribute.id);
+        }
     }
 
     ngOnDestroy(): void {

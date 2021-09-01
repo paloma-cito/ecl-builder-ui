@@ -40,10 +40,12 @@ export class EclService {
     }
 
     createShortFormConcept(expression): string {
-        if (expression.wildcard) {
-            return '*';
-        } else {
-            return expression.conceptId + ' |' + expression.term + '|';
+        if (expression) {
+            if (expression.wildcard) {
+                return '*';
+            } else {
+                return expression.conceptId + ' |' + expression.term + '|';
+            }
         }
     }
 
