@@ -103,14 +103,18 @@ export class HttpService {
                 if (expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
                     expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
                         item.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(item.attribute.attributeName);
-                        item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                        if (item.attribute.value) {
+                            item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                        }
                     });
                 }
 
                 if (expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
                     expression.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
                         item.attribute.attributeName.fullTerm = this.eclService.createShortFormConcept(item.attribute.attributeName);
-                        item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                        if (item.attribute.value) {
+                            item.attribute.value.fullTerm = this.eclService.createShortFormConcept(item.attribute.value);
+                        }
                     });
                 }
 
@@ -157,14 +161,20 @@ export class HttpService {
             if (eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
                 eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(item => {
                     delete item.attribute.attributeName.fullTerm;
-                    delete item.attribute.value.fullTerm;
+
+                    if (!item.attribute.numericComparisonOperator) {
+                        delete item.attribute.value.fullTerm;
+                    }
                 });
             }
 
             if (eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
                 eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(item => {
                     delete item.attribute.attributeName.fullTerm;
-                    delete item.attribute.value.fullTerm;
+
+                    if (!item.attribute.numericComparisonOperator) {
+                        delete item.attribute.value.fullTerm;
+                    }
                 });
             }
         }
@@ -199,8 +209,10 @@ export class HttpService {
                     expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator = 'self';
                 }
 
+                console.log('one');
                 if (!expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator
                     && !expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
+                    console.log('two');
                     expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator = 'self';
                 }
             }
@@ -211,7 +223,9 @@ export class HttpService {
                         item.attribute.attributeName.operator = 'self';
                     }
 
-                    if (!item.attribute.value.operator) {
+                    console.log('three');
+                    if (!item.attribute.numericComparisonOperator && !item.attribute.value.operator) {
+                        console.log('four');
                         item.attribute.value.operator = 'self';
                     }
                 });
@@ -223,7 +237,9 @@ export class HttpService {
                         item.attribute.attributeName.operator = 'self';
                     }
 
-                    if (!item.attribute.value.operator) {
+                    console.log('five');
+                    if (!item.attribute.numericComparisonOperator && !item.attribute.value.operator) {
+                        console.log('six');
                         item.attribute.value.operator = 'self';
                     }
                 });
@@ -258,8 +274,10 @@ export class HttpService {
                     delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator;
                 }
 
+                console.log('seven');
                 if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator
                     && eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator === 'self') {
+                    console.log('eight');
                     delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator;
                 }
             }
@@ -270,7 +288,9 @@ export class HttpService {
                         delete item.attribute.attributeName.operator;
                     }
 
-                    if (item.attribute.value.operator === 'self') {
+                    console.log('nine');
+                    if (!item.attribute.numericComparisonOperator && item.attribute.value.operator === 'self') {
+                        console.log('ten');
                         delete item.attribute.value.operator;
                     }
                 });
@@ -282,7 +302,9 @@ export class HttpService {
                         delete item.attribute.attributeName.operator;
                     }
 
-                    if (item.attribute.value.operator === 'self') {
+                    console.log('eleven');
+                    if (!item.attribute.numericComparisonOperator && item.attribute.value.operator === 'self') {
+                        console.log('twelve');
                         delete item.attribute.value.operator;
                     }
                 });

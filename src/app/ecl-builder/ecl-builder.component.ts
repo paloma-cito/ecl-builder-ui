@@ -165,16 +165,52 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     setupConcrete(event): void {
         if (this.isConcreteDomain(event)) {
-            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
-                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator;
-            }
+            if (this.eclObject.eclRefinement) {
+                if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value) {
+                    delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value;
+                }
 
-            if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator) {
-                delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator;
-            }
+                if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator) {
+                    delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.expressionComparisonOperator;
+                }
 
-            if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator) {
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator = '=';
+                if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator) {
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator = '=';
+                }
+            } else if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(conj => {
+                    if (this.isConcreteDomain(conj.attribute.attributeName.fullTerm)) {
+                        if (conj.attribute.value) {
+                            delete conj.attribute.value;
+                        }
+
+                        if (conj.attribute.expressionComparisonOperator) {
+                            delete conj.attribute.expressionComparisonOperator;
+                        }
+
+                        if (!conj.attribute.numericComparisonOperator) {
+                            conj.attribute.numericComparisonOperator = '=';
+                        }
+                    }
+
+                });
+            } else if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(disj => {
+                    if (this.isConcreteDomain(disj.attribute.attributeName.fullTerm)) {
+                        if (disj.attribute.value) {
+                            delete disj.attribute.value;
+                        }
+
+                        if (disj.attribute.expressionComparisonOperator) {
+                            delete disj.attribute.expressionComparisonOperator;
+                        }
+
+                        if (!disj.attribute.numericComparisonOperator) {
+                            disj.attribute.numericComparisonOperator = '=';
+                        }
+                    }
+
+                });
             }
         }
     }
@@ -348,15 +384,19 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     }
 
     getOpSymbol(operator): string {
-        switch (operator) {
-            case 'self': return '';
-            case 'descendantof': return '<';
-            case 'descendantorselfof': return '<<';
-            case 'childof': return '<!';
-            case 'ancestorof': return '>';
-            case 'ancestororselfof': return '>>';
-            case 'parentof': return '>!';
-            case 'memberOf': return '^';
+        if (operator) {
+            switch (operator) {
+                case 'self': return '';
+                case 'descendantof': return '<';
+                case 'descendantorselfof': return '<<';
+                case 'childof': return '<!';
+                case 'ancestorof': return '>';
+                case 'ancestororselfof': return '>>';
+                case 'parentof': return '>!';
+                case 'memberOf': return '^';
+            }
+        } else {
+            return '';
         }
     }
 
