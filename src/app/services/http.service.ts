@@ -184,7 +184,7 @@ export class HttpService {
 
     addSelfOperator(eclObject): any {
         const expression: any = this.cloneObject(eclObject);
-        if (!expression.operator) {
+        if (!expression.operator && !expression.eclRefinement) {
             expression.operator = 'self';
         }
         if (expression.conjunctionExpressionConstraints) {
@@ -209,10 +209,8 @@ export class HttpService {
                     expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator = 'self';
                 }
 
-                console.log('one');
                 if (!expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator
                     && !expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator) {
-                    console.log('two');
                     expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator = 'self';
                 }
             }
@@ -223,9 +221,7 @@ export class HttpService {
                         item.attribute.attributeName.operator = 'self';
                     }
 
-                    console.log('three');
                     if (!item.attribute.numericComparisonOperator && !item.attribute.value.operator) {
-                        console.log('four');
                         item.attribute.value.operator = 'self';
                     }
                 });
@@ -237,9 +233,7 @@ export class HttpService {
                         item.attribute.attributeName.operator = 'self';
                     }
 
-                    console.log('five');
                     if (!item.attribute.numericComparisonOperator && !item.attribute.value.operator) {
-                        console.log('six');
                         item.attribute.value.operator = 'self';
                     }
                 });
@@ -274,10 +268,8 @@ export class HttpService {
                     delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator;
                 }
 
-                console.log('seven');
                 if (!eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator
                     && eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator === 'self') {
-                    console.log('eight');
                     delete eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator;
                 }
             }
@@ -288,9 +280,7 @@ export class HttpService {
                         delete item.attribute.attributeName.operator;
                     }
 
-                    console.log('nine');
                     if (!item.attribute.numericComparisonOperator && item.attribute.value.operator === 'self') {
-                        console.log('ten');
                         delete item.attribute.value.operator;
                     }
                 });
@@ -302,9 +292,7 @@ export class HttpService {
                         delete item.attribute.attributeName.operator;
                     }
 
-                    console.log('eleven');
                     if (!item.attribute.numericComparisonOperator && item.attribute.value.operator === 'self') {
-                        console.log('twelve');
                         delete item.attribute.value.operator;
                     }
                 });
