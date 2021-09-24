@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build --prod --output-hashing none && node concatenate.js` to build the project. This will give you a bundled file in the output folder.
+Run `ng build --configuration production --output-hashing none && node concatenate.js` to build the project. This will give you a bundled file in the output folder.
 
 ## Running unit tests
 
