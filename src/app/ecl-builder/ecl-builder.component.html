@@ -15,7 +15,7 @@
 
                     <ng-container *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && !eclObject?.subexpressionConstraint">
                         <div class="expression-group grey">
-                            <div class="expression-row">
+                            <div class="expression-row flex">
                                 <select [(ngModel)]="eclObject.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
@@ -26,12 +26,9 @@
                                     <option [value]="'parentof'">>! Parent of</option>
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <span class="ellipsis">
-                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search(eclObject)" placement="bottom"/>
-                                    <ng-container *ngIf="eclObject?.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(eclObject)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
                                 <button *ngIf="eclObject?.fullTerm" class="circle green" (click)="newFocusConceptRow()">
                                     <span>&#43;</span></button>
                             </div>
@@ -39,7 +36,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.conjunctionExpressionConstraints">
                         <div class="expression-group grey">
-                            <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first; let i = index" class="expression-row">
+                            <div *ngFor="let conj of eclObject.conjunctionExpressionConstraints; let first = first; let i = index" class="expression-row flex">
                                 <select *ngIf="!first" (change)="convertConjunctionToDisjunction()">
                                     <option value="AND" selected>AND</option>
                                     <option value="OR">OR</option>
@@ -54,12 +51,9 @@
                                     <option [value]="'parentof'">>! Parent of</option>
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <span class="ellipsis">
-                                    <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search(conj)" placement="bottom"/>
-                                    <ng-container *ngIf="conj?.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="conj.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(conj)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
                                 <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
                                 </button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
@@ -68,7 +62,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.disjunctionExpressionConstraints">
                         <div class="expression-group grey">
-                            <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first; let i = index" class="expression-row">
+                            <div *ngFor="let disj of eclObject.disjunctionExpressionConstraints; let first = first; let i = index" class="expression-row flex">
                                 <select *ngIf="!first" (change)="convertDisjunctionToConjunction()">
                                     <option value="AND">AND</option>
                                     <option value="OR" selected>OR</option>
@@ -85,12 +79,9 @@
                                     <!--                                    <option [value]="'parentorselfof'">>>! Parent or Self of</option>-->
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <span class="ellipsis">
-                                    <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search(disj)" placement="bottom"/>
-                                    <ng-container *ngIf="disj?.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="disj.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(disj)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
                                 <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
                                 </button>
                                 <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
@@ -99,7 +90,7 @@
                     </ng-container>
                     <ng-container *ngIf="eclObject?.subexpressionConstraint">
                         <div class="expression-group grey">
-                            <div class="expression-row">
+                            <div class="expression-row flex">
                                 <select [(ngModel)]="eclObject.subexpressionConstraint.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
@@ -110,13 +101,9 @@
                                     <option [value]="'parentof'">>! Parent of</option>
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <span class="ellipsis">
-                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (selectItem)="updateExpression()"
-                                           (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search(eclObject)" placement="bottom"/>
-                                    <ng-container *ngIf="eclObject?.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Search..." [(ngModel)]="eclObject.subexpressionConstraint.fullTerm" (selectItem)="updateExpression()" (ngModelChange)="getConceptId(eclObject.subexpressionConstraint)" [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
                             </div>
                         </div>
                     </ng-container>
@@ -129,7 +116,7 @@
                     </button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="expression-group blue">
-                            <div class="expression-row">
+                            <div class="expression-row flex">
                                 <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator" (ngModelChange)="updateExpression()">
                                     <option [value]="'self'">Self</option>
                                     <option [value]="'descendantof'">< Descendant of</option>
@@ -140,21 +127,31 @@
                                     <option [value]="'parentof'">>! Parent of</option>
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
-                                <span class="ellipsis">
-                                    <input *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
+                                <div *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" class="position-relative">
+                                    <input type="text" placeholder="Search..."
                                            [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
                                            (selectItem)="updateExpression(); setupConcrete($event.item)"
                                            (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"
-                                           [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" placement="bottom"/>
-                                    <input *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
+                                           [ngbTypeahead]="search" placement="bottom"/>
+                                </div>
+                                <div *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" class="position-relative">
+                                    <input type="text" placeholder="Search..."
                                            [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"
                                            (selectItem)="updateExpression(); setupConcrete($event.item)"
                                            (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"
-                                           [ngbTypeahead]="search(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" placement="bottom"/>
-                                    <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.searching">
-                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                    </ng-container>
-                                </span>
+                                           [ngbTypeahead]="searchMrcmType2" placement="bottom"/>
+                                </div>
+
+<!--                                <span *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" class="ellipsis">-->
+<!--                                    <input type="text" placeholder="Search..."-->
+<!--                                           [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm"-->
+<!--                                           (selectItem)="updateExpression(); setupConcrete($event.item)"-->
+<!--                                           (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)"-->
+<!--                                           [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName)" placement="bottom"/>-->
+<!--                                    <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.searching">-->
+<!--                                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>-->
+<!--                                    </ng-container>-->
+<!--                                </span>-->
                                 <ng-container *ngIf="isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
                                     <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator" (ngModelChange)="updateExpression()">
                                         <option [value]="'='">=</option>
@@ -182,21 +179,20 @@
                                             <option [value]="'parentof'">>! Parent of</option>
                                             <option [value]="'memberOf'">^ Member of</option>
                                         </select>
-                                        <span class="ellipsis">
-                                        <input *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                               [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                               (selectItem)="updateExpression()"
-                                               (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
-                                               [ngbTypeahead]="searchMrcmTarget(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName, eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
-                                        <input *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                               [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
-                                               (selectItem)="updateExpression()"
-                                               (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
-                                               [ngbTypeahead]="search(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)" placement="bottom"/>
-                                        <ng-container *ngIf="eclObject?.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.searching">
-                                            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                        </ng-container>
-                                    </span>
+                                        <div *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" class="position-relative">
+                                            <input type="text" placeholder="Search..."
+                                                   [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
+                                                   (selectItem)="updateExpression()"
+                                                   (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
+                                                   [ngbTypeahead]="search" placement="bottom"/>
+                                        </div>
+                                        <div *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" class="position-relative">
+                                            <input type="text" placeholder="Search..."
+                                                   [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.fullTerm"
+                                                   (selectItem)="updateExpression()"
+                                                   (ngModelChange)="getConceptId(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value)"
+                                                   [ngbTypeahead]="searchMrcmTarget2" placement="bottom"/>
+                                        </div>
                                     </ng-container>
                                 </ng-container>
 
@@ -206,7 +202,7 @@
                                 </button>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
-                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let i = index" class="expression-row">
+                                <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let i = index" class="expression-row flex">
                                     <select (change)="convertConjunctionRefinementToDisjunctionRefinement()">
                                         <option value="AND" selected>AND</option>
                                         <option value="OR">OR</option>
@@ -221,17 +217,20 @@
                                         <option [value]="'parentof'">>! Parent of</option>
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
-                                    <span class="ellipsis">
-                                        <input *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
+                                    <div *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative">
+                                        <input type="text" placeholder="Search..."
+                                               [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
+                                               (selectItem)="updateExpression(); setupConcrete($event.item)"
+                                               (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)"
+                                               [ngbTypeahead]="search" placement="bottom"/>
+                                    </div>
+
+                                    <span *ngIf="isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" class="ellipsis">
+                                        <input type="text" placeholder="Search..."
                                                [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
                                                (selectItem)="updateExpression(); setupConcrete($event.item)"
                                                (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)"
                                                [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId, conjunctionAttributeSet.attribute.attributeName)" placement="bottom"/>
-                                        <input *ngIf="isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
-                                               [(ngModel)]="conjunctionAttributeSet.attribute.attributeName.fullTerm"
-                                               (selectItem)="updateExpression(); setupConcrete($event.item)"
-                                               (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.attributeName)"
-                                               [ngbTypeahead]="search(conjunctionAttributeSet.attribute.attributeName)" placement="bottom"/>
                                         <ng-container *ngIf="conjunctionAttributeSet?.attribute.attributeName.searching">
                                             <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                                         </ng-container>
@@ -262,17 +261,20 @@
                                             <option [value]="'parentof'">>! Parent of</option>
                                             <option [value]="'memberOf'">^ Member of</option>
                                         </select>
-                                        <span class="ellipsis">
-                                            <input *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
+                                        <div *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.value.operator)" class="position-relative">
+                                            <input type="text" placeholder="Search..."
+                                                   [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
+                                                   (selectItem)="updateExpression()"
+                                                   (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)"
+                                                   [ngbTypeahead]="search" placement="bottom"/>
+                                        </div>
+
+                                        <span *ngIf="isMemberOf(conjunctionAttributeSet.attribute.value.operator)" class="ellipsis">
+                                            <input type="text" placeholder="Search..."
                                                    [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
                                                    (selectItem)="updateExpression()"
                                                    (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)"
                                                    [ngbTypeahead]="searchMrcmTarget(conjunctionAttributeSet.attribute.attributeName, conjunctionAttributeSet.attribute.value, 'conjunction')" placement="bottom"/>
-                                            <input *ngIf="isMemberOf(conjunctionAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                                   [(ngModel)]="conjunctionAttributeSet.attribute.value.fullTerm"
-                                                   (selectItem)="updateExpression()"
-                                                   (ngModelChange)="getConceptId(conjunctionAttributeSet.attribute.value)"
-                                                   [ngbTypeahead]="search(conjunctionAttributeSet.attribute.value)" placement="bottom"/>
                                             <ng-container *ngIf="conjunctionAttributeSet?.attribute.value.searching">
                                                 <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                                             </ng-container>
@@ -285,7 +287,7 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet">
-                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet; let i = index" class="expression-row">
+                                <div *ngFor="let disjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet; let i = index" class="expression-row flex">
                                     <select (change)="convertDisjunctionRefinementToConjunctionRefinement()">
                                         <option value="AND">AND</option>
                                         <option value="OR" selected>OR</option>
@@ -300,17 +302,20 @@
                                         <option [value]="'parentof'">>! Parent of</option>
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
-                                    <span class="ellipsis">
-                                        <input *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
+                                    <div *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative">
+                                        <input type="text" placeholder="Search..."
+                                               [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.fullTerm"
+                                               (selectItem)="updateExpression(); setupConcrete($event.item)"
+                                               (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)"
+                                               [ngbTypeahead]="search" placement="bottom"/>
+                                    </div>
+
+                                    <span *ngIf="isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" class="ellipsis">
+                                        <input type="text" placeholder="Search..."
                                                [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.fullTerm"
                                                (selectItem)="updateExpression(); setupConcrete($event.item)"
                                                (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)"
                                                [ngbTypeahead]="searchMrcmType(eclObject.subexpressionConstraint.conceptId, disjunctionAttributeSet.attribute.attributeName)" placement="bottom"/>
-                                        <input *ngIf="isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" type="text" placeholder="Search..."
-                                               [(ngModel)]="disjunctionAttributeSet.attribute.attributeName.fullTerm"
-                                               (selectItem)="updateExpression(); setupConcrete($event.item)"
-                                               (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.attributeName)"
-                                               [ngbTypeahead]="search(disjunctionAttributeSet.attribute.attributeName)" placement="bottom"/>
                                             <ng-container *ngIf="disjunctionAttributeSet?.attribute.attributeName.searching">
                                             <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                                         </ng-container>
@@ -341,17 +346,20 @@
                                             <option [value]="'parentof'">>! Parent of</option>
                                             <option [value]="'memberOf'">^ Member of</option>
                                         </select>
-                                        <span class="ellipsis">
-                                            <input *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
+                                        <div *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.value.operator)" class="position-relative">
+                                            <input type="text" placeholder="Search..."
+                                                   [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
+                                                   (selectItem)="updateExpression()"
+                                                   (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)"
+                                                   [ngbTypeahead]="search" placement="bottom"/>
+                                        </div>
+
+                                        <span *ngIf="isMemberOf(disjunctionAttributeSet.attribute.value.operator)" class="ellipsis">
+                                            <input type="text" placeholder="Search..."
                                                    [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
                                                    (selectItem)="updateExpression()"
                                                    (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)"
                                                    [ngbTypeahead]="searchMrcmTarget(disjunctionAttributeSet.attribute.attributeName, disjunctionAttributeSet.attribute.value,'disjunction')" placement="bottom"/>
-                                            <input *ngIf="isMemberOf(disjunctionAttributeSet.attribute.value.operator)" type="text" placeholder="Search..."
-                                                   [(ngModel)]="disjunctionAttributeSet.attribute.value.fullTerm"
-                                                   (selectItem)="updateExpression()"
-                                                   (ngModelChange)="getConceptId(disjunctionAttributeSet.attribute.value)"
-                                                   [ngbTypeahead]="search(disjunctionAttributeSet.attribute.value)" placement="bottom"/>
                                             <ng-container *ngIf="disjunctionAttributeSet?.attribute.value.searching">
                                                 <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                                             </ng-container>

@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ECLExpression, SubAttributeSet, Attribute} from '../models/ecl';
 import {catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
-import {Observable, of, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {HttpService} from '../services/http.service';
 import {EclService} from '../services/ecl.service';
 
@@ -19,25 +19,47 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
 
     refinementActive = false;
     attributes: any[];
+    spinner = document.createElement('div');
 
     eclObject: any;
     eclObjectSubscription: Subscription;
     @Input() eclString: string;
     eclStringSubscription: Subscription;
 
-    search(eclObject): (text$: Observable<string>) => Observable<any[]> {
-        return (text$: Observable<string>) => text$.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            filter((text) => text.length > 2),
-            switchMap((text) => {
-                eclObject.searching = true;
-                return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
-                    tap(() => delete eclObject.searching));
-            }),
-            catchError(tap(() => delete eclObject.searching))
-        );
-    }
+    search = (text$: Observable<string>) => text$.pipe(
+        debounceTime(300),
+        filter((text) => text.length > 2),
+        distinctUntilChanged(),
+        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
+        switchMap(term => this.httpService.getTypeahead(this.apiUrl, this.branch, term)
+            .pipe(tap(() => document.getElementById('spinner').remove()))
+        ),
+        catchError(tap(() => document.getElementById('spinner').remove()))
+    )
+
+    searchMrcmType2 = (text$: Observable<string>) => text$.pipe(
+        debounceTime(300),
+        filter((text) => text.length > 2),
+        distinctUntilChanged(),
+        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
+        switchMap(term => this.httpService.getMrcmType(this.apiUrl, this.branch, term, this.eclObject.subexpressionConstraint.conceptId)
+            .pipe(tap(() => document.getElementById('spinner').remove()))
+        ),
+        catchError(tap(() => document.getElementById('spinner').remove()))
+    )
+
+    searchMrcmTarget2 = (text$: Observable<string>) => text$.pipe(
+        debounceTime(300),
+        filter((text) => text.length > 2),
+        distinctUntilChanged(),
+        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
+        switchMap(term => this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId)
+            .pipe(tap(() => document.getElementById('spinner').remove()))
+        ),
+        catchError(tap(() => document.getElementById('spinner').remove()))
+    )
+
+    // The above two MrcmTypeaheads are the new ones, and will not yet work with conjunction/disjunction until we can parameterize them
 
     searchMrcmType(conceptId, eclObject): (text$: Observable<string>) => Observable<any[]> {
         return (text$: Observable<string>) => text$.pipe(
@@ -94,6 +116,10 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.element = el.nativeElement;
         this.eclObjectSubscription = this.eclService.getEclObject().subscribe(data => this.eclObject = data);
         this.eclStringSubscription = this.eclService.getEclString().subscribe(data => this.eclString = data);
+        this.spinner.id = 'spinner';
+        this.spinner.classList.add('spinner-border', 'spinner-border-sm', 'position-absolute');
+        this.spinner.style.top = '7px';
+        this.spinner.style.right = '7px';
     }
 
     ngOnInit(): void {

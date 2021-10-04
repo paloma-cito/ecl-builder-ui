@@ -150,6 +150,14 @@ div.modal {
                             padding: 0 15px 15px 10px;
                             margin: 10px;
 
+                            &.flex {
+                                display: flex;
+                            }
+
+                            div {
+                                width: 25vw;
+                            }
+
                             select {
                                 padding: 2px 20px 2px 5px;
                                 height: 30px;
@@ -185,7 +193,7 @@ div.modal {
                                 font-size: 14px;
                                 border-radius: 4px;
                                 border: 1px solid #C8CFD6;
-                                width: 25vw;
+                                width: 100%;
                                 font-weight: 400;
                             }
                         }
