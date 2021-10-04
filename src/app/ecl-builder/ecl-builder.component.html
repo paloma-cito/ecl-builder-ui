@@ -246,6 +246,7 @@
                                         </select>
                                         <input type="text" placeholder="Search..." [(ngModel)]="conjunctionAttributeSet.attribute.numericValue" (ngModelChange)="updateExpression()">
                                     </ng-container>
+                                    <div *ngIf="conjunctionAttributeSet.attribute.expressionComparisonOperator">
                                     <ng-container *ngIf="!isConcreteDomain(conjunctionAttributeSet.attribute.attributeName.fullTerm)">
                                         <select [(ngModel)]="conjunctionAttributeSet.attribute.expressionComparisonOperator" (ngModelChange)="updateExpression()">
                                             <option [value]="'='">=</option>
@@ -280,6 +281,7 @@
                                             </ng-container>
                                         </span>
                                     </ng-container>
+                                    </div>
                                     <button class="circle red" (click)="removeAttributeGroupRow('conjunction', i)">
                                         <span>&#8722;</span></button>
                                     <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
