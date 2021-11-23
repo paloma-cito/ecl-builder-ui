@@ -26,92 +26,6 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
     @Input() eclString: string;
     eclStringSubscription: Subscription;
 
-    search = (text$: Observable<string>) => text$.pipe(
-        debounceTime(300),
-        filter((text) => text.length > 2),
-        distinctUntilChanged(),
-        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
-        switchMap(term => this.httpService.getTypeahead(this.apiUrl, this.branch, term)
-            .pipe(tap(() => document.getElementById('spinner').remove()))
-        ),
-        catchError(tap(() => document.getElementById('spinner').remove()))
-    )
-
-    searchMrcmType2 = (text$: Observable<string>) => text$.pipe(
-        debounceTime(300),
-        filter((text) => text.length > 2),
-        distinctUntilChanged(),
-        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
-        switchMap(term => this.httpService.getMrcmType(this.apiUrl, this.branch, term, this.eclObject.subexpressionConstraint.conceptId)
-            .pipe(tap(() => document.getElementById('spinner').remove()))
-        ),
-        catchError(tap(() => document.getElementById('spinner').remove()))
-    )
-
-    searchMrcmTarget2 = (text$: Observable<string>) => text$.pipe(
-        debounceTime(300),
-        filter((text) => text.length > 2),
-        distinctUntilChanged(),
-        tap(() => document.activeElement.parentElement.appendChild(this.spinner)),
-        switchMap(term => this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId)
-            .pipe(tap(() => document.getElementById('spinner').remove()))
-        ),
-        catchError(tap(() => document.getElementById('spinner').remove()))
-    )
-
-    // The above two MrcmTypeaheads are the new ones, and will not yet work with conjunction/disjunction until we can parameterize them
-
-    searchMrcmType(conceptId, eclObject): (text$: Observable<string>) => Observable<any[]> {
-        return (text$: Observable<string>) => text$.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            filter((text) => text.length > 2),
-            switchMap((text) => {
-                eclObject.searching = true;
-                if (!conceptId){
-                    return this.httpService.getTypeahead(this.apiUrl, this.branch, text).pipe(
-                        tap(() => delete eclObject.searching));
-                }
-                else{
-                    return this.httpService.getMrcmType(this.apiUrl, this.branch, text, conceptId).pipe(
-                        tap(() => delete eclObject.searching));
-                }
-            }),
-            catchError(tap(() => delete eclObject.searching))
-        );
-    }
-
-    searchMrcmTarget(attributeName, value, type?): (text$: Observable<string>) => Observable<any[]> {
-        return (text$: Observable<string>) => text$.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            filter((text) => text.length > 2),
-            switchMap(term => {
-                if (!attributeName.conceptId) {
-                    value.searching = true;
-                    return this.httpService.getTypeahead(this.apiUrl, this.branch, term).pipe(
-                        tap(() => delete value.searching));
-                }
-                else if (!type) {
-                    value.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
-                        tap(() => delete value.searching));
-                }
-                else if (type === 'conjunction') {
-                    value.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
-                        tap(() => delete value.searching));
-                }
-                else if (type === 'disjunction') {
-                    value.searching = true;
-                    return this.httpService.getMrcmTarget(this.apiUrl, this.branch, term, attributeName.conceptId).pipe(
-                        tap(() => delete value.searching));
-                }
-            }),
-            catchError(tap(() => delete value.searching))
-        );
-    }
-
     constructor(private el: ElementRef, private httpService: HttpService, private eclService: EclService) {
         this.element = el.nativeElement;
         this.eclObjectSubscription = this.eclService.getEclObject().subscribe(data => this.eclObject = data);
@@ -146,11 +60,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         });
     }
 
-    isConcreteDomain(id): boolean {
-        if (this.attributes) {
-            return this.attributes.find(attribute => String(this.getIdFromShortConcept(id)) === attribute.id);
-        }
-    }
+
 
     ngOnDestroy(): void {
         this.element.remove();
@@ -188,8 +98,8 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         });
     }
 
-    setupConcrete(event): void {
-        if (this.isConcreteDomain(event)) {
+    setupConcrete(name): void {
+        if (this.isConcreteDomain(name)) {
             if (this.eclObject.eclRefinement) {
                 if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value) {
                     delete this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value;
@@ -202,41 +112,55 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
                 if (!this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator) {
                     this.eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator = '=';
                 }
-            } else if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(conj => {
-                    if (this.isConcreteDomain(conj.attribute.attributeName.fullTerm)) {
-                        if (conj.attribute.value) {
-                            delete conj.attribute.value;
+
+                if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet) {
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet.forEach(conj => {
+                        if (this.isConcreteDomain(name)) {
+                            if (conj.attribute.value) {
+                                delete conj.attribute.value;
+                            }
+
+                            if (conj.attribute.expressionComparisonOperator) {
+                                delete conj.attribute.expressionComparisonOperator;
+                            }
+
+                            if (!conj.attribute.numericComparisonOperator) {
+                                conj.attribute.numericComparisonOperator = '=';
+                            }
                         }
 
-                        if (conj.attribute.expressionComparisonOperator) {
-                            delete conj.attribute.expressionComparisonOperator;
+                    });
+                } else if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
+                    this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(disj => {
+                        if (this.isConcreteDomain(name)) {
+                            if (disj.attribute.value) {
+                                delete disj.attribute.value;
+                            }
+
+                            if (disj.attribute.expressionComparisonOperator) {
+                                delete disj.attribute.expressionComparisonOperator;
+                            }
+
+                            if (!disj.attribute.numericComparisonOperator) {
+                                disj.attribute.numericComparisonOperator = '=';
+                            }
                         }
 
-                        if (!conj.attribute.numericComparisonOperator) {
-                            conj.attribute.numericComparisonOperator = '=';
-                        }
-                    }
-
-                });
-            } else if (this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet) {
-                this.eclObject.eclRefinement.subRefinement.eclAttributeSet.disjunctionAttributeSet.forEach(disj => {
-                    if (this.isConcreteDomain(disj.attribute.attributeName.fullTerm)) {
-                        if (disj.attribute.value) {
-                            delete disj.attribute.value;
-                        }
-
-                        if (disj.attribute.expressionComparisonOperator) {
-                            delete disj.attribute.expressionComparisonOperator;
-                        }
-
-                        if (!disj.attribute.numericComparisonOperator) {
-                            disj.attribute.numericComparisonOperator = '=';
-                        }
-                    }
-
-                });
+                    });
+                }
             }
+        }
+    }
+
+    isConcreteDomain(id): boolean {
+        if (this.attributes) {
+            return this.attributes.find(attribute => String(this.getIdFromShortConcept(id)) === attribute.id);
+        }
+    }
+
+    getIdFromShortConcept(input): string {
+        if (input) {
+            return input.replace(/\D/g, '');
         }
     }
 
@@ -402,11 +326,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.eclService.setEclString('');
     }
 
-    getIdFromShortConcept(input): string {
-        if (input) {
-            return input.replace(/\D/g, '');
-        }
-    }
+
 
     getOpSymbol(operator): string {
         if (operator) {

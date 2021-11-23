@@ -54,14 +54,21 @@ export class EclService {
     }
 
     convertRefinementToConjunction(expression): ECLExpressionWithRefinement {
-        return new ECLExpressionWithRefinement(
-            new ECLExpression(
-                expression.subexpressionConstraint.operator,
-                expression.subexpressionConstraint.conceptId,
-                expression.subexpressionConstraint.wildcard,
-                expression.subexpressionConstraint.term,
-                this.createShortFormConcept(expression.subexpressionConstraint)),
-            new EClRefinement(new SubRefinement(new EClAttributeSet(
+        let newExpression: any;
+
+        if (expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator) {
+            expression.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet = [new SubAttributeSet(new Attribute(new ECLExpression(), '=', new ECLExpression(), false, 1))];
+
+            newExpression = expression;
+        } else {
+            newExpression = new ECLExpressionWithRefinement(
+                new ECLExpression(
+                    expression.subexpressionConstraint.operator,
+                    expression.subexpressionConstraint.conceptId,
+                    expression.subexpressionConstraint.wildcard,
+                    expression.subexpressionConstraint.term,
+                    this.createShortFormConcept(expression.subexpressionConstraint)),
+                new EClRefinement(new SubRefinement(new EClAttributeSet(
                     new SubAttributeSet(new Attribute(
                         new ECLExpression(
                             expression.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator,
@@ -86,9 +93,12 @@ export class EclService {
                         false,
                         1
                     ))]
-                )
-            ))
-        );
+                    )
+                ))
+            );
+        }
+
+        return newExpression;
     }
 
     convertDisjunctionToConjunction(disjunction): ECLConjunctionExpression {
