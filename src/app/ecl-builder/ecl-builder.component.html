@@ -107,7 +107,7 @@
                     </ng-container>
                 </div>
 
-                <div *ngIf="!eclObject.conjunctionExpressionConstraints && !eclObject.disjunctionExpressionConstraints && refinementActive" class="expression-section">
+                <div *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && refinementActive" class="expression-section">
                     <h3>Refinements</h3>
                     <button class="green" *ngIf="!eclObject?.eclRefinement" (click)="newAttributeGroup()">ADD REFINEMENT</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
