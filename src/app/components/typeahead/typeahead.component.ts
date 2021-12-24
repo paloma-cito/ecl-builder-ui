@@ -31,9 +31,10 @@ export class TypeaheadComponent implements OnInit {
 
     constructor(private httpService: HttpService) {
         this.spinner.id = 'spinner';
-        this.spinner.classList.add('spinner-border', 'spinner-border-sm', 'position-absolute');
+        this.spinner.classList.add('ecl-spinner', 'spinner-border-sm', 'position-absolute');
         this.spinner.style.top = '7px';
         this.spinner.style.right = '7px';
+        this.spinner.style.marginLeft = 'auto';
     }
 
     ngOnInit(): void {

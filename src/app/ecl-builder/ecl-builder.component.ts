@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, Output, EventEmitter, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ECLExpression, SubAttributeSet, Attribute} from '../models/ecl';
 import {catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
@@ -8,7 +8,8 @@ import {EclService} from '../services/ecl.service';
 @Component({
     selector: 'app-ecl-builder',
     templateUrl: './ecl-builder.component.html',
-    styleUrls: ['./ecl-builder.component.scss']
+    styleUrls: ['./ecl-builder.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class EclBuilderComponent implements OnInit, OnDestroy {
 
@@ -31,7 +32,7 @@ export class EclBuilderComponent implements OnInit, OnDestroy {
         this.eclObjectSubscription = this.eclService.getEclObject().subscribe(data => this.eclObject = data);
         this.eclStringSubscription = this.eclService.getEclString().subscribe(data => this.eclString = data);
         this.spinner.id = 'spinner';
-        this.spinner.classList.add('spinner-border', 'spinner-border-sm', 'position-absolute');
+        this.spinner.classList.add('ecl-spinner', 'spinner-border-sm', 'position-absolute');
         this.spinner.style.top = '7px';
         this.spinner.style.right = '7px';
     }

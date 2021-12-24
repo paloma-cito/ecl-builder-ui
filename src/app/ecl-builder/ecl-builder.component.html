@@ -1,4 +1,4 @@
-<div class="modal">
+<div class="modal ecl-builder">
     <div class="modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
             </div>
 
             <div class="modal-body">
-                <button class="purple" (click)="clear()">CLEAR</button>
+                <button class="purple ecl-form" (click)="clear()">CLEAR</button>
                 <div *ngIf="eclObject" class="expression-section">
                     <h3>Focus Concept</h3>
 
@@ -27,9 +27,9 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <div class="position-relative">
-                                    <app-typeahead [model]="eclObject" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                    <app-typeahead [model]="eclObject" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                 </div>
-                                <button *ngIf="eclObject?.fullTerm" class="circle green" (click)="newFocusConceptRow()">
+                                <button *ngIf="eclObject?.fullTerm" class="circle green ecl-form" (click)="newFocusConceptRow()">
                                     <span>&#43;</span></button>
                             </div>
                         </div>
@@ -52,11 +52,11 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <div class="position-relative">
-                                    <app-typeahead [model]="conj" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                    <app-typeahead [model]="conj" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                 </div>
-                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
+                                <button *ngIf="!first" class="circle red ecl-form" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
                                 </button>
-                                <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
+                                <button class="circle green ecl-form" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
                         </div>
                     </ng-container>
@@ -78,11 +78,11 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <div class="position-relative">
-                                    <app-typeahead [model]="disj" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                    <app-typeahead [model]="disj" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                 </div>
-                                <button *ngIf="!first" class="circle red" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
+                                <button *ngIf="!first" class="circle red ecl-form" (click)="removeFocusConceptRow(i)"><span>&#8722;</span>
                                 </button>
-                                <button class="circle green" (click)="newFocusConceptRow()"><span>&#43;</span></button>
+                                <button class="circle green ecl-form" (click)="newFocusConceptRow()"><span>&#43;</span></button>
                             </div>
                         </div>
                     </ng-container>
@@ -100,7 +100,7 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <div class="position-relative">
-                                    <app-typeahead [model]="eclObject.subexpressionConstraint" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                    <app-typeahead [model]="eclObject.subexpressionConstraint" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
 
                 <div *ngIf="!eclObject?.conjunctionExpressionConstraints && !eclObject?.disjunctionExpressionConstraints && refinementActive" class="expression-section">
                     <h3>Refinements</h3>
-                    <button class="green" *ngIf="!eclObject?.eclRefinement" (click)="newAttributeGroup()">ADD REFINEMENT</button>
+                    <button class="green ecl-form" *ngIf="!eclObject?.eclRefinement" (click)="newAttributeGroup()">ADD REFINEMENT</button>
                     <ng-container *ngIf="eclObject?.eclRefinement">
                         <div class="expression-group blue">
                             <div class="expression-row flex">
@@ -124,10 +124,10 @@
                                     <option [value]="'memberOf'">^ Member of</option>
                                 </select>
                                 <div *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                    <app-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)"></app-typeahead>
+                                    <app-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" class="ecl-builder-typeahead"></app-typeahead>
                                 </div>
                                 <div *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                    <app-type-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId"></app-type-typeahead>
+                                    <app-type-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId" class="ecl-builder-typeahead"></app-type-typeahead>
                                 </div>
                                 <ng-container *ngIf="isConcreteDomain(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.fullTerm)">
                                     <select [(ngModel)]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.numericComparisonOperator" (ngModelChange)="updateExpression()">
@@ -157,15 +157,15 @@
                                             <option [value]="'memberOf'">^ Member of</option>
                                         </select>
                                         <div *ngIf="isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" class="position-relative typeahead-box">
-                                            <app-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                            <app-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                         </div>
                                         <div *ngIf="!isMemberOf(eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value.operator)" class="position-relative typeahead-box">
-                                            <app-target-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId"></app-target-typeahead>
+                                            <app-target-typeahead [model]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="eclObject.eclRefinement.subRefinement.eclAttributeSet.subAttributeSet.attribute.attributeName.conceptId" class="ecl-builder-typeahead"></app-target-typeahead>
                                         </div>
                                     </ng-container>
                                 </ng-container>
-                                <button class="circle red" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
-                                <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
+                                <button class="circle red ecl-form" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
+                                <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
                                 <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let i = index" class="expression-row flex">
@@ -184,10 +184,10 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <div *ngIf="isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                        <app-typeahead [model]="conjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)"></app-typeahead>
+                                        <app-typeahead [model]="conjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" class="ecl-builder-typeahead"></app-typeahead>
                                     </div>
                                     <div *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                        <app-type-typeahead [model]="conjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId"></app-type-typeahead>
+                                        <app-type-typeahead [model]="conjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId" class="ecl-builder-typeahead"></app-type-typeahead>
                                     </div>
                                     <ng-container *ngIf="isConcreteDomain(conjunctionAttributeSet.attribute.attributeName.fullTerm)">
                                         <select [(ngModel)]="conjunctionAttributeSet.attribute.numericComparisonOperator" (ngModelChange)="updateExpression()">
@@ -217,16 +217,16 @@
                                                 <option [value]="'memberOf'">^ Member of</option>
                                             </select>
                                             <div *ngIf="isMemberOf(conjunctionAttributeSet.attribute.value.operator)" class="position-relative typeahead-box">
-                                                <app-typeahead [model]="conjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                                <app-typeahead [model]="conjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                             </div>
                                             <div *ngIf="!isMemberOf(conjunctionAttributeSet.attribute.value.operator)" class="position-relative typeahead-box">
-                                                <app-target-typeahead [model]="conjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="conjunctionAttributeSet.attribute.attributeName.conceptId"></app-target-typeahead>
+                                                <app-target-typeahead [model]="conjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="conjunctionAttributeSet.attribute.attributeName.conceptId" class="ecl-builder-typeahead"></app-target-typeahead>
                                             </div>
                                         </ng-container>
                                     </ng-container>
-                                    <button class="circle red" (click)="removeAttributeGroupRow('conjunction', i)">
+                                    <button class="circle red ecl-form" (click)="removeAttributeGroupRow('conjunction', i)">
                                         <span>&#8722;</span></button>
-                                    <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
+                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
                                     </button>
                                 </div>
                             </ng-container>
@@ -247,10 +247,10 @@
                                         <option [value]="'memberOf'">^ Member of</option>
                                     </select>
                                     <div *ngIf="isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                        <app-typeahead [model]="disjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)"></app-typeahead>
+                                        <app-typeahead [model]="disjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" class="ecl-builder-typeahead"></app-typeahead>
                                     </div>
                                     <div *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.attributeName.operator)" class="position-relative typeahead-box">
-                                        <app-type-typeahead [model]="disjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId"></app-type-typeahead>
+                                        <app-type-typeahead [model]="disjunctionAttributeSet.attribute.attributeName" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression(); setupConcrete($event?.item)" [typeId]="eclObject.subexpressionConstraint.conceptId" class="ecl-builder-typeahead"></app-type-typeahead>
                                     </div>
                                     <ng-container *ngIf="isConcreteDomain(disjunctionAttributeSet.attribute.attributeName.fullTerm)">
                                         <select [(ngModel)]="disjunctionAttributeSet.attribute.numericComparisonOperator" (ngModelChange)="updateExpression()">
@@ -280,16 +280,16 @@
                                                 <option [value]="'memberOf'">^ Member of</option>
                                             </select>
                                             <div *ngIf="isMemberOf(disjunctionAttributeSet.attribute.value.operator)" class="position-relative typeahead-box">
-                                                <app-typeahead [model]="disjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()"></app-typeahead>
+                                                <app-typeahead [model]="disjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" class="ecl-builder-typeahead"></app-typeahead>
                                             </div>
                                             <div *ngIf="!isMemberOf(disjunctionAttributeSet.attribute.value.operator)" class="ellipsis">
-                                                <app-target-typeahead [model]="disjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="disjunctionAttributeSet.attribute.attributeName.conceptId"></app-target-typeahead>
+                                                <app-target-typeahead [model]="disjunctionAttributeSet.attribute.value" [apiUrl]="apiUrl" [branch]="branch" (updateExpression)="updateExpression()" [targetId]="disjunctionAttributeSet.attribute.attributeName.conceptId" class="ecl-builder-typeahead"></app-target-typeahead>
                                             </div>
                                         </ng-container>
                                     </ng-container>
-                                    <button class="circle red" (click)="removeAttributeGroupRow('disjunction', i)">
+                                    <button class="circle red ecl-form" (click)="removeAttributeGroupRow('disjunction', i)">
                                         <span>&#8722;</span></button>
-                                    <button class="circle green" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
+                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
                                     </button>
                                 </div>
                             </ng-container>
