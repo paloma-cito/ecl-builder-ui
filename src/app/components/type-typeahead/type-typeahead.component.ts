@@ -35,6 +35,7 @@ export class TypeTypeaheadComponent implements OnInit {
         this.spinner.classList.add('ecl-spinner', 'spinner-border-sm', 'position-absolute');
         this.spinner.style.top = '7px';
         this.spinner.style.right = '7px';
+        this.spinner.style.marginLeft = 'auto';
     }
 
     ngOnInit(): void {
