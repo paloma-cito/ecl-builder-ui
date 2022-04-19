@@ -7,7 +7,7 @@ body {
 div.modal.ecl-builder {
     display: block;
 
-    font-family: 'Poppins', 'Helvetica Neue', 'Roboto', 'Arial', sans-serif;
+    font-family: 'Poppins', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 1.2rem;
     font-weight: 300;
     color: black;
@@ -18,7 +18,7 @@ div.modal.ecl-builder {
         margin: 10vh auto;
 
         div.modal-content {
-            background-color: #fff;
+            background-color: white;
             z-index: 1100;
             border-radius: 6px;
             border: none;
@@ -28,7 +28,7 @@ div.modal.ecl-builder {
                 background-color: #343A40;
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;
-                height: 40px;
+                height: 20px;
                 padding: 10px;
 
                 h3 {
@@ -40,6 +40,7 @@ div.modal.ecl-builder {
                 }
 
                 button {
+                    font-family: inherit;
                     position: absolute;
                     top: 0;
                     right: 10px;
@@ -55,6 +56,7 @@ div.modal.ecl-builder {
                     }
 
                     span {
+                        font-family: inherit;
                         font-size: 24px;
                         font-weight: 200;
                         color: white;
@@ -66,19 +68,18 @@ div.modal.ecl-builder {
 
             div.modal-body {
                 padding: 0;
-                background-color: #fff;
+                background-color: white;
 
                 h3 {
                     font-size: 18px;
-                    margin: 0 0 10px 0;
-                    padding-left: 20px;
-                    padding-top: 25px;
+                    margin: 0;
+                    padding: 20px;
                     font-weight: 300;
                     line-height: 20px;
                 }
 
                 button {
-                    
+
                     &.ecl-form {
                         position:absolute;
                         border-radius: 16px;
@@ -135,15 +136,15 @@ div.modal.ecl-builder {
                 }
 
                 div.expression-section {
-                    border-bottom: 1px solid #dee2e6;
                     position: relative;
+                    background-color: white;
+                    border-bottom: 1px solid #dee2e6;
 
                     div.expression-group {
                         position: relative;
                         border: 1px solid #C8CFD6;
                         border-radius: 8px;
-                        padding-top: 10px;
-                        margin: 20px;
+                        margin: 0 20px 20px 20px;
 
                         &.blue {
                             background-color: lighten(#49A8DB, 30%);
@@ -155,7 +156,7 @@ div.modal.ecl-builder {
 
                         div.expression-row {
                             position: relative;
-                            padding: 0 15px 15px 10px;
+                            padding: 15px;
                             margin: 10px;
 
                             &.flex {
@@ -165,7 +166,7 @@ div.modal.ecl-builder {
                             div {
                                 width: 22vw;
                             }
-                            
+
                             .ecl-spinner {
                                 width: 1rem;
                             }
@@ -227,7 +228,11 @@ div.modal.ecl-builder {
                 }
 
                 div.output-section {
+                    position: relative;
+                    background-color: white;
+
                     p.output, div.output {
+                        position: relative;
                         font-family: 'Courier New', serif;
                         font-size: 16px;
                         letter-spacing: normal;
@@ -265,8 +270,9 @@ div.modal.ecl-builder {
             }
 
             div.modal-footer {
-                margin: 0;
+                position: relative;
                 background-color: white;
+                margin: 0;
                 border-top: 1px solid #dee2e6;
                 border-bottom-left-radius: 6px;
                 border-bottom-right-radius: 6px;
@@ -310,7 +316,6 @@ div.modal.ecl-builder {
         bottom: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
     }
 }
 
@@ -337,7 +342,7 @@ ngb-typeahead-window.dropdown-menu {
 }
 
 .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
+    color: white;
     text-decoration: none;
     background-color: #007bff;
 }
@@ -345,7 +350,7 @@ ngb-typeahead-window.dropdown-menu {
 @keyframes spinner {
   to {transform: rotate(360deg);}
 }
- 
+
 .ecl-spinner:before {
   content: '';
   box-sizing: border-box;

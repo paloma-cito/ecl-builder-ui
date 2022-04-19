@@ -10,6 +10,10 @@ concatenate = async () =>{
 
     await fs.ensureDir('output');
     await concat(files, 'output/ecl-builder.js');
+
+    // pduff
+    // await concat(files, '../blank-template/node_modules/snomed-ecl-builder/output/ecl-builder.js');
+    
     // await fs.copyFile('./dist/ecl-builder-ui/styles.css', 'output/styles.css');
     // await fs.copy('./dist/ecl-builder-ui/assets/', 'output/assets/');
 }
