@@ -166,7 +166,7 @@
                                     </ng-container>
                                 </ng-container>
                                 <button class="circle red ecl-form" (click)="removeAttributeGroupRow(null)"><span>&#8722;</span></button>
-                                <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span></button>
+                                <button class="circle green ecl-form" (click)="newAttributeGroupRow()"><span>&#43;</span></button>
                             </div>
                             <ng-container *ngIf="eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet">
                                 <div *ngFor="let conjunctionAttributeSet of eclObject.eclRefinement.subRefinement.eclAttributeSet.conjunctionAttributeSet; let i = index" class="expression-row flex">
@@ -227,7 +227,7 @@
                                     </ng-container>
                                     <button class="circle red ecl-form" (click)="removeAttributeGroupRow('conjunction', i)">
                                         <span>&#8722;</span></button>
-                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
+                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow()"><span>&#43;</span>
                                     </button>
                                 </div>
                             </ng-container>
@@ -290,7 +290,7 @@
                                     </ng-container>
                                     <button class="circle red ecl-form" (click)="removeAttributeGroupRow('disjunction', i)">
                                         <span>&#8722;</span></button>
-                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow(null)"><span>&#43;</span>
+                                    <button class="circle green ecl-form" (click)="newAttributeGroupRow()"><span>&#43;</span>
                                     </button>
                                 </div>
                             </ng-container>
